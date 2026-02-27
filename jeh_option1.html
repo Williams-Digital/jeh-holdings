@@ -677,8 +677,9 @@
 
         /* ========== RESOURCES SECTION ========== */
         .resources {
-            padding: 80px 40px;
+            padding: 100px 40px;
             background: var(--bg-light);
+            position: relative;
         }
 
         .resources-grid {
@@ -690,38 +691,93 @@
         }
 
         .resource-card {
-            padding: 25px 20px;
+            padding: 30px 28px;
             border: 1px solid var(--border);
             background: var(--bg);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             cursor: pointer;
             display: flex;
-            align-items: center;
-            gap: 15px;
+            align-items: flex-start;
+            gap: 18px;
+            position: relative;
+            text-decoration: none;
         }
 
         .resource-card:hover {
-            border-color: rgba(201, 168, 76, 0.4);
-            box-shadow: 0 2px 10px rgba(201, 168, 76, 0.08);
+            border-color: rgba(201, 168, 76, 0.35);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+            transform: translateY(-3px);
+            background: linear-gradient(165deg, var(--bg) 0%, rgba(18, 36, 59, 0.5) 100%);
         }
 
         .resource-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--accent);
-            color: #fff;
+            width: 48px;
+            height: 48px;
+            background: transparent;
+            border: 1.5px solid rgba(201, 168, 76, 0.25);
+            color: var(--gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
             flex-shrink: 0;
-            border-radius: 3px;
+            border-radius: 10px;
+            transition: all 0.4s ease;
+        }
+
+        .resource-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.4s ease;
+        }
+
+        .resource-card:hover .resource-icon {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .resource-card:hover .resource-icon svg {
+            stroke: var(--navy);
+        }
+
+        .resource-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .resource-card h4 {
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             color: #ffffff;
-            font-weight: 600;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .resource-card .resource-desc {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .resource-card .resource-dl {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 6px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            transition: gap 0.3s ease;
+        }
+
+        .resource-card:hover .resource-dl {
+            gap: 9px;
         }
 
         /* ========== FOOTER ========== */
@@ -1017,30 +1073,66 @@
             <div class="accent-divider"></div>
         </div>
         <div class="resources-grid">
-            <div class="resource-card reveal">
-                <div class="resource-icon">&#9724;</div>
-                <h4>Myths About Asset Protection</h4>
-            </div>
-            <div class="resource-card reveal">
-                <div class="resource-icon">&#9724;</div>
-                <h4>Own Nothing. Control Everything</h4>
-            </div>
-            <div class="resource-card reveal">
-                <div class="resource-icon">&#9724;</div>
-                <h4>Cost of Asset Protection Services</h4>
-            </div>
-            <div class="resource-card reveal">
-                <div class="resource-icon">&#9724;</div>
-                <h4>Land Trust Structure To Protect Real Property</h4>
-            </div>
-            <div class="resource-card reveal">
-                <div class="resource-icon">&#9724;</div>
-                <h4>Rupert Francisco, JD</h4>
-            </div>
-            <div class="resource-card reveal">
-                <div class="resource-icon">&#9724;</div>
-                <h4>Private Single Family Trust Company</h4>
-            </div>
+            <a class="resource-card reveal" href="#">
+                <div class="resource-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="resource-info">
+                    <h4>Myths About Asset Protection</h4>
+                    <p class="resource-desc">Common misconceptions about protecting your wealth and why they could cost you everything.</p>
+                    <span class="resource-dl">Download PDF <span>&darr;</span></span>
+                </div>
+            </a>
+            <a class="resource-card reveal" href="#">
+                <div class="resource-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="resource-info">
+                    <h4>Own Nothing. Control Everything</h4>
+                    <p class="resource-desc">The foundational philosophy behind effective asset protection planning.</p>
+                    <span class="resource-dl">Download PDF <span>&darr;</span></span>
+                </div>
+            </a>
+            <a class="resource-card reveal" href="#">
+                <div class="resource-icon">
+                    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div class="resource-info">
+                    <h4>Cost of Asset Protection Services</h4>
+                    <p class="resource-desc">Transparent pricing breakdown for our onshore and offshore planning structures.</p>
+                    <span class="resource-dl">Download PDF <span>&darr;</span></span>
+                </div>
+            </a>
+            <a class="resource-card reveal" href="#">
+                <div class="resource-icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="resource-info">
+                    <h4>Land Trust Structure To Protect Real Property</h4>
+                    <p class="resource-desc">How land trusts can shield your real estate holdings from creditors and litigation.</p>
+                    <span class="resource-dl">Download PDF <span>&darr;</span></span>
+                </div>
+            </a>
+            <a class="resource-card reveal" href="our-principal.html">
+                <div class="resource-icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="resource-info">
+                    <h4>Rupert Francisco, JD</h4>
+                    <p class="resource-desc">Biography and credentials of our founding principal and president.</p>
+                    <span class="resource-dl">View Profile <span>&rarr;</span></span>
+                </div>
+            </a>
+            <a class="resource-card reveal" href="#">
+                <div class="resource-icon">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                </div>
+                <div class="resource-info">
+                    <h4>Private Single Family Trust Company</h4>
+                    <p class="resource-desc">An exclusive trust structure for families seeking maximum control and privacy.</p>
+                    <span class="resource-dl">Download PDF <span>&darr;</span></span>
+                </div>
+            </a>
         </div>
     </section>
 
