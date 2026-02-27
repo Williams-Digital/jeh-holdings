@@ -421,7 +421,7 @@
         .services-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
+            gap: 2px;
             max-width: 1100px;
             margin: 0 auto;
         }
@@ -429,43 +429,106 @@
         .service-card {
             background: var(--bg);
             border: 1px solid var(--border);
-            padding: 40px 30px;
-            transition: all 0.3s ease;
-            text-align: center;
+            padding: 45px 35px;
+            transition: all 0.4s ease;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
         }
 
         .service-card:hover {
-            border-color: rgba(201, 168, 76, 0.4);
-            box-shadow: 0 5px 20px rgba(201, 168, 76, 0.1);
-            transform: translateY(-3px);
+            border-color: rgba(201, 168, 76, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-4px);
+            background: linear-gradient(165deg, var(--bg) 0%, rgba(18, 36, 59, 0.6) 100%);
         }
 
         .service-icon {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 20px;
-            background: var(--accent);
-            color: #fff;
+            width: 56px;
+            height: 56px;
+            margin-bottom: 24px;
+            background: transparent;
+            border: 1.5px solid rgba(201, 168, 76, 0.3);
+            color: var(--gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            border-radius: 4px;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+        }
+
+        .service-icon svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover .service-icon {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .service-card:hover .service-icon svg {
+            stroke: var(--navy);
         }
 
         .service-card h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .service-card p {
-            font-size: 0.85rem;
-            line-height: 1.7;
+            font-size: 0.82rem;
+            line-height: 1.8;
             color: var(--text-light);
+        }
+
+        .service-card .service-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 18px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
+            transition: gap 0.3s ease;
+        }
+
+        .service-card:hover .service-link {
+            gap: 10px;
+        }
+
+        .service-card .service-link span {
+            transition: transform 0.3s ease;
         }
 
         /* ========== URGENT CTA SECTION ========== */
@@ -756,7 +819,7 @@
             .hero { min-height: 550px; }
             .hero-corner { display: none; }
             .hero-accent-line { display: none; }
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .services-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
             .resources-grid { grid-template-columns: repeat(2, 1fr); }
             .athletes-content { grid-template-columns: 1fr; gap: 40px; }
             nav { padding: 0 20px; }
@@ -846,34 +909,52 @@
         </div>
         <div class="services-grid">
             <div class="service-card reveal">
-                <div class="service-icon">&#9670;</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
                 <h3>Asset Protection</h3>
-                <p>Our fees are competitive and our services are of the highest quality.</p>
+                <p>Safeguard your wealth with proven legal structures designed to shield your assets from litigation, creditors, and unforeseen threats.</p>
+                <a href="#contact" class="service-link">Learn More <span>&rarr;</span></a>
             </div>
             <div class="service-card reveal">
-                <div class="service-icon">&#9670;</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 21h18M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
+                </div>
                 <h3>OnShore Services</h3>
-                <p>Our fees are competitive and our services are of the highest quality.</p>
+                <p>Domestic planning structures including LLCs, trusts, and corporate entities that provide robust protection within U.S. jurisdictions.</p>
+                <a href="#contact" class="service-link">Learn More <span>&rarr;</span></a>
             </div>
             <div class="service-card reveal">
-                <div class="service-icon">&#9670;</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
                 <h3>OffShore Services</h3>
-                <p>Our fees are competitive and our services are of the highest quality.</p>
+                <p>International planning strategies leveraging global jurisdictions to provide an additional layer of privacy and asset security.</p>
+                <a href="#contact" class="service-link">Learn More <span>&rarr;</span></a>
             </div>
             <div class="service-card reveal">
-                <div class="service-icon">&#9670;</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
                 <h3>Business Formation</h3>
-                <p>Our fees are competitive and our services are of the highest quality.</p>
+                <p>Strategic entity structuring for new and existing businesses, optimized for liability protection, tax efficiency, and operational flexibility.</p>
+                <a href="#contact" class="service-link">Learn More <span>&rarr;</span></a>
             </div>
             <div class="service-card reveal">
-                <div class="service-icon">&#9670;</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
                 <h3>Estate Planning</h3>
-                <p>Our fees are competitive and our services are of the highest quality.</p>
+                <p>Comprehensive estate strategies including trusts, wills, and succession planning to preserve and transfer wealth across generations.</p>
+                <a href="#contact" class="service-link">Learn More <span>&rarr;</span></a>
             </div>
             <div class="service-card reveal">
-                <div class="service-icon">&#9670;</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                </div>
                 <h3>Business Advisor</h3>
-                <p>Our fees are competitive and our services are of the highest quality.</p>
+                <p>Expert consulting and strategic guidance to help you navigate complex financial landscapes and make informed decisions for growth.</p>
+                <a href="#contact" class="service-link">Learn More <span>&rarr;</span></a>
             </div>
         </div>
     </section>
