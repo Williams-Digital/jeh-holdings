@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JE Holdings, LLC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8D5A3;
+            --gold-dark: #8B7331;
+            --gold-glow: rgba(201, 168, 76, 0.4);
+            --navy: #0A1628;
+            --navy-mid: #12243B;
+            --navy-light: #1B3A5C;
+            --white: #F5F0E8;
+            --pure-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        /* ================================================================
+           VAULT LOADING SCREEN
+           ================================================================ */
+        .vault-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--navy);
+            transition: opacity 0.8s ease;
+        }
+
+        .vault-loader.done {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .vault-scene {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            perspective: 1200px;
+        }
+
+        /* Vault Frame (the wall/opening) */
+        .vault-frame {
+            position: absolute;
+            inset: 0;
+            border: 20px solid #1a2a44;
+            border-radius: 12px;
+            box-shadow:
+                inset 0 0 40px rgba(0, 0, 0, 0.6),
+                0 0 80px rgba(0, 0, 0, 0.3);
+            background: radial-gradient(ellipse at center, #0d1e35 0%, #060e1a 100%);
+            z-index: 1;
+        }
+
+        .vault-frame-bolts {
+            position: absolute;
+            inset: -20px;
+            z-index: 3;
+        }
+
+        .vault-bolt {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle at 35% 35%, #5a6a80, #2a3a50);
+            border-radius: 50%;
+            border: 1px solid #3a4a60;
+        }
+
+        .vault-bolt:nth-child(1) { top: 6px; left: 6px; }
+        .vault-bolt:nth-child(2) { top: 6px; right: 6px; }
+        .vault-bolt:nth-child(3) { bottom: 6px; left: 6px; }
+        .vault-bolt:nth-child(4) { bottom: 6px; right: 6px; }
+
+        /* Vault Door */
+        .vault-door-container {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .vault-loader.opening .vault-door-container {
+            transform: rotateY(-110deg);
+        }
+
+        .vault-door-face {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, #2a3d5c 0%, #1a2844 40%, #0f1e38 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            box-shadow:
+                inset 2px 2px 15px rgba(255, 255, 255, 0.03),
+                inset -2px -2px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Door side (thickness) */
+        .vault-door-side {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 100%;
+            background: linear-gradient(to right, #1a2a44, #0f1e38);
+            transform: rotateY(90deg) translateZ(0px);
+            transform-origin: left;
+            backface-visibility: hidden;
+        }
+
+        /* Vault Door Ring */
+        .vault-ring {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            border: 6px solid var(--gold);
+            box-shadow:
+                0 0 30px rgba(201, 168, 76, 0.15),
+                inset 0 0 30px rgba(201, 168, 76, 0.05);
+        }
+
+        .vault-ring-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 3px solid rgba(201, 168, 76, 0.5);
+        }
+
+        .vault-ring-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid rgba(201, 168, 76, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vault-ring-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        /* Vault Spokes */
+        .vault-spoke-group {
+            position: absolute;
+            inset: 0;
+            animation: slowSpin 20s linear infinite;
+        }
+
+        .vault-loader.opening .vault-spoke-group {
+            animation: spinOpen 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes slowSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spinOpen {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(720deg); }
+        }
+
+        .vault-spoke-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 5%, var(--gold) 20%, var(--gold) 80%, transparent 95%);
+            transform-origin: center;
+            opacity: 0.7;
+        }
+
+        .vault-spoke-line:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
+        .vault-spoke-line:nth-child(2) { transform: translate(-50%, -50%) rotate(60deg); }
+        .vault-spoke-line:nth-child(3) { transform: translate(-50%, -50%) rotate(120deg); }
+
+        /* Locking Bars */
+        .vault-lock-bars {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+        }
+
+        .lock-bar {
+            position: absolute;
+            background: linear-gradient(to bottom, #3a4d6a, #2a3d5c, #1a2d4c);
+            box-shadow: 1px 0 3px rgba(0, 0, 0, 0.3);
+            transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .lock-bar-right {
+            right: 0;
+            top: 20%;
+            width: 18px;
+            height: 25%;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .lock-bar-right-2 {
+            right: 0;
+            top: 55%;
+            width: 18px;
+            height: 25%;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .lock-bar-top {
+            top: 0;
+            left: 30%;
+            width: 20%;
+            height: 18px;
+            border-radius: 0 0 3px 3px;
+        }
+
+        .lock-bar-bottom {
+            bottom: 0;
+            left: 50%;
+            width: 20%;
+            height: 18px;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .vault-loader.opening .lock-bar-right { transform: translateX(30px); }
+        .vault-loader.opening .lock-bar-right-2 { transform: translateX(30px); }
+        .vault-loader.opening .lock-bar-top { transform: translateY(-30px); }
+        .vault-loader.opening .lock-bar-bottom { transform: translateY(30px); }
+
+        /* Loading text under vault */
+        .vault-loading-text {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .vault-loading-text p {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+        }
+
+        /* Inside vault glow (visible when door opens) */
+        .vault-interior-glow {
+            position: absolute;
+            inset: 20px;
+            background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 1.5s ease 0.5s;
+        }
+
+        .vault-loader.opening .vault-interior-glow {
+            opacity: 1;
+        }
+
+        .vault-interior-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+
+        .vault-loader.opening .vault-interior-text {
+            opacity: 1;
+        }
+
+        .vault-interior-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        /* ================================================================
+           MAIN SITE STYLES
+           ================================================================ */
+
+        /* NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(30px);
+            padding: 12px 60px;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--white);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            display: block;
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(245, 240, 232, 0.8);
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 28px !important;
+            border: 1px solid var(--gold) !important;
+            color: var(--gold) !important;
+            transition: all 0.4s ease !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold) !important;
+            color: var(--navy) !important;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        /* ========== GOLD PARTICLES ========== */
+        .particles-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-particle linear infinite;
+        }
+
+        @keyframes float-particle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20px) scale(1);
+            }
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg-gradient {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 120% 80% at 50% 40%, rgba(201, 168, 76, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse 80% 60% at 50% 100%, rgba(18, 36, 59, 0.5) 0%, transparent 60%);
+            z-index: 1;
+        }
+
+        /* Animated grid lines */
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.03;
+            background-image:
+                linear-gradient(var(--gold) 1px, transparent 1px),
+                linear-gradient(90deg, var(--gold) 1px, transparent 1px);
+            background-size: 80px 80px;
+            animation: gridShift 20s linear infinite;
+        }
+
+        @keyframes gridShift {
+            from { transform: translate(0, 0); }
+            to { transform: translate(80px, 80px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            max-width: 950px;
+            padding: 0 40px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 28px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: clipReveal 1s ease 0.5s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.1), transparent);
+            animation: shimmer 3s ease infinite 2s;
+        }
+
+        @keyframes shimmer {
+            from { left: -100%; }
+            to { left: 100%; }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1.05;
+            color: var(--pure-white);
+            letter-spacing: -1px;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero h1 .line-inner {
+            display: block;
+            transform: translateY(120%);
+            animation: lineReveal 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .hero h1 .line:nth-child(1) .line-inner { animation-delay: 0.8s; }
+        .hero h1 .line:nth-child(2) .line-inner { animation-delay: 1s; }
+
+        @keyframes lineReveal {
+            to { transform: translateY(0); }
+        }
+
+        @keyframes clipReveal {
+            from { opacity: 0; clip-path: inset(0 100% 0 0); }
+            to { opacity: 1; clip-path: inset(0 0 0 0); }
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--gold);
+            position: relative;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: rgba(245, 240, 232, 0.6);
+            line-height: 1.8;
+            max-width: 580px;
+            margin: 0 auto 50px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1.4s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1.7s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-primary {
+            padding: 16px 48px;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--gold);
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+        }
+
+        .btn-secondary {
+            padding: 16px 48px;
+            background: transparent;
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid rgba(245, 240, 232, 0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.1);
+        }
+
+        /* Rotating service words */
+        .rotating-services {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 2s forwards;
+        }
+
+        .rotating-label {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(245, 240, 232, 0.3);
+        }
+
+        .rotating-word-container {
+            height: 20px;
+            overflow: hidden;
+            width: 200px;
+        }
+
+        .rotating-word {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            animation: wordRotate 12s ease infinite;
+        }
+
+        @keyframes wordRotate {
+            0%, 14% { transform: translateY(0); }
+            16.66%, 30.66% { transform: translateY(-20px); }
+            33.33%, 47.33% { transform: translateY(-40px); }
+            50%, 64% { transform: translateY(-60px); }
+            66.66%, 80.66% { transform: translateY(-80px); }
+            83.33%, 97.33% { transform: translateY(-100px); }
+            100% { transform: translateY(-120px); }
+        }
+
+        /* ========== STATEMENT SECTION ========== */
+        .statement {
+            padding: 160px 60px;
+            text-align: center;
+            position: relative;
+            background: var(--navy);
+            overflow: hidden;
+        }
+
+        .statement::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--gold));
+        }
+
+        .statement-words {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .statement-words .word {
+            display: inline-block;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: rgba(245, 240, 232, 0.15);
+            transition: color 0.6s ease;
+            margin: 0 4px;
+        }
+
+        .statement-words .word.visible {
+            color: var(--white);
+        }
+
+        .statement-words .word.gold {
+            color: var(--gold) !important;
+            font-weight: 600;
+        }
+
+        .statement-badge {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 12px 36px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .statement-badge.visible {
+            opacity: 1;
+        }
+
+        /* ========== SERVICES SECTION ========== */
+        .services {
+            padding: 140px 60px;
+            background: var(--navy-mid);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--pure-white);
+            line-height: 1.3;
+        }
+
+        .gold-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+            margin: 25px auto 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gold-divider::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: var(--gold-light);
+            animation: dividerShimmer 2s ease infinite;
+        }
+
+        @keyframes dividerShimmer {
+            from { left: -50%; }
+            to { left: 150%; }
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(10, 22, 40, 0.5);
+            border: 1px solid rgba(201, 168, 76, 0.08);
+            padding: 50px 40px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .service-card.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(201, 168, 76, 0.06) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            transform: scaleX(0);
+            transition: transform 0.6s ease;
+        }
+
+        .service-card:hover {
+            border-color: rgba(201, 168, 76, 0.25);
+            transform: translateY(-8px) !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .service-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: rgba(201, 168, 76, 0.08);
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            transition: color 0.4s ease;
+        }
+
+        .service-card:hover .service-number {
+            color: rgba(201, 168, 76, 0.15);
+        }
+
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--pure-white);
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .service-card p {
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: rgba(245, 240, 232, 0.5);
+            position: relative;
+        }
+
+        /* ========== URGENT CTA ========== */
+        .urgent-section {
+            padding: 140px 60px;
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .urgent-bg-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 15rem;
+            font-weight: 900;
+            color: rgba(201, 168, 76, 0.02);
+            white-space: nowrap;
+            pointer-events: none;
+            letter-spacing: -5px;
+        }
+
+        .urgent-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .urgent-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--white);
+            margin-bottom: 50px;
+        }
+
+        .urgent-text .gold {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ========== ATHLETES SECTION ========== */
+        .athletes-section {
+            padding: 140px 60px;
+            background: linear-gradient(160deg, var(--navy-mid) 0%, var(--navy) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .athletes-section::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            border: 1px solid rgba(201, 168, 76, 0.04);
+            border-radius: 50%;
+        }
+
+        .athletes-section::after {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            border: 1px solid rgba(201, 168, 76, 0.03);
+            border-radius: 50%;
+        }
+
+        .athletes-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .athletes-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--pure-white);
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .athletes-text h2 em {
+            font-style: normal;
+            color: var(--gold);
+        }
+
+        .athletes-text p {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: rgba(245, 240, 232, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .service-tag {
+            padding: 10px 22px;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+
+        .service-tag:hover {
+            background: rgba(201, 168, 76, 0.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(201, 168, 76, 0.1);
+        }
+
+        .athletes-visual {
+            position: relative;
+        }
+
+        .vault-mini {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .vault-mini-ring {
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(201, 168, 76, 0.15);
+            border-radius: 50%;
+            animation: slowSpin 30s linear infinite;
+        }
+
+        .vault-mini-ring:nth-child(2) {
+            inset: 30px;
+            border-color: rgba(201, 168, 76, 0.1);
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+
+        .vault-mini-ring:nth-child(3) {
+            inset: 60px;
+            border-color: rgba(201, 168, 76, 0.08);
+            animation-duration: 20s;
+        }
+
+        .vault-mini-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(201, 168, 76, 0.03);
+        }
+
+        .vault-mini-center-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.7rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* Ring decorative dots */
+        .ring-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        /* ========== TESTIMONIAL ========== */
+        .testimonial {
+            padding: 160px 60px;
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0.2;
+        }
+
+        .testimonial-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .quote-icon {
+            font-family: 'Playfair Display', serif;
+            font-size: 8rem;
+            color: var(--gold);
+            opacity: 0.1;
+            line-height: 0.5;
+            margin-bottom: 30px;
+        }
+
+        .testimonial-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.45rem;
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.9;
+            color: var(--white);
+            margin-bottom: 45px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .testimonial-quote.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .testimonial-author {
+            color: var(--gold);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .testimonial-title {
+            color: rgba(245, 240, 232, 0.4);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* ========== RESOURCES ========== */
+        .resources {
+            padding: 140px 60px;
+            background: var(--navy-mid);
+        }
+
+        .resources-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .resource-card {
+            padding: 35px 30px;
+            border: 1px solid rgba(201, 168, 76, 0.08);
+            background: rgba(10, 22, 40, 0.3);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .resource-card.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .resource-card:hover {
+            border-color: rgba(201, 168, 76, 0.2);
+            transform: translateY(-5px) !important;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .resource-icon {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 0.8rem;
+            margin-bottom: 18px;
+        }
+
+        .resource-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: var(--pure-white);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 80px 60px 40px;
+            background: var(--navy);
+            border-top: 1px solid rgba(201, 168, 76, 0.08);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-brand p {
+            color: rgba(245, 240, 232, 0.35);
+            font-size: 0.85rem;
+            max-width: 300px;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 60px;
+        }
+
+        .footer-col h5 {
+            color: var(--gold);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            text-decoration: none;
+            color: rgba(245, 240, 232, 0.4);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid rgba(245, 240, 232, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            color: rgba(245, 240, 232, 0.25);
+            font-size: 0.78rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 968px) {
+            .vault-scene { width: 350px; height: 350px; }
+            .vault-ring { width: 180px; height: 180px; }
+            .vault-ring-inner { width: 120px; height: 120px; }
+            .vault-ring-center { width: 55px; height: 55px; }
+            .hero h1 { font-size: 3.5rem; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .resources-grid { grid-template-columns: repeat(2, 1fr); }
+            .athletes-content { grid-template-columns: 1fr; gap: 60px; }
+            nav { padding: 15px 30px; }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .vault-scene { width: 280px; height: 280px; }
+            .hero h1 { font-size: 2.5rem; }
+            .statement-words .word { font-size: 1.5rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .resources-grid { grid-template-columns: 1fr; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .section-title { font-size: 2.2rem; }
+            .footer-top { flex-direction: column; gap: 40px; }
+            .footer-links { gap: 30px; }
+            .urgent-bg-text { font-size: 6rem; }
+        }
+    </style>
+</head>
+<body class="loading">
+
+    <!-- ================================================================
+         VAULT DOOR LOADING SCREEN
+         ================================================================ -->
+    <div class="vault-loader" id="vaultLoader">
+        <div class="vault-scene">
+            <div class="vault-frame">
+                <div class="vault-frame-bolts">
+                    <div class="vault-bolt"></div>
+                    <div class="vault-bolt"></div>
+                    <div class="vault-bolt"></div>
+                    <div class="vault-bolt"></div>
+                </div>
+            </div>
+
+            <!-- Interior glow visible when door opens -->
+            <div class="vault-interior-glow"></div>
+            <div class="vault-interior-text">
+                <h2>JE Holdings</h2>
+            </div>
+
+            <!-- Locking bars that retract -->
+            <div class="vault-lock-bars">
+                <div class="lock-bar lock-bar-right"></div>
+                <div class="lock-bar lock-bar-right-2"></div>
+                <div class="lock-bar lock-bar-top"></div>
+                <div class="lock-bar lock-bar-bottom"></div>
+            </div>
+
+            <!-- The vault door that swings open -->
+            <div class="vault-door-container">
+                <div class="vault-door-face">
+                    <div class="vault-ring">
+                        <div class="vault-spoke-group">
+                            <div class="vault-spoke-line"></div>
+                            <div class="vault-spoke-line"></div>
+                            <div class="vault-spoke-line"></div>
+                        </div>
+                        <div class="vault-ring-inner">
+                            <div class="vault-ring-center">
+                                <div class="vault-ring-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vault-door-side"></div>
+            </div>
+
+            <div class="vault-loading-text">
+                <p class="loading-dots">JE Holdings</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GOLD PARTICLES -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+        <div class="logo">JE Holdings<span>LLC</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#principal">Our Principal</a></li>
+            <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="grid-overlay"></div>
+        <div class="hero-bg-gradient"></div>
+        <div class="hero-content">
+            <div class="hero-badge">Wealth ENsurance</div>
+            <h1>
+                <span class="line"><span class="line-inner">Own Nothing.</span></span>
+                <span class="line"><span class="line-inner"><em>Control Everything.</em></span></span>
+            </h1>
+            <p class="hero-sub">At J.E. Holding, LLC., we can structure, on an expedited basis, a plan that meets all your needs.</p>
+            <div class="hero-buttons">
+                <a href="#services" class="btn-primary">View Services</a>
+                <a href="#about" class="btn-secondary">Discover More</a>
+            </div>
+        </div>
+        <div class="rotating-services">
+            <span class="rotating-label">Expertise</span>
+            <div class="rotating-word-container">
+                <span class="rotating-word">Asset Protection</span>
+                <span class="rotating-word">Estate Planning</span>
+                <span class="rotating-word">Business Formation</span>
+                <span class="rotating-word">Onshore Planning</span>
+                <span class="rotating-word">Offshore Planning</span>
+                <span class="rotating-word">Business Advisors</span>
+                <span class="rotating-word">Asset Protection</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATEMENT SECTION -->
+    <section class="statement" id="about">
+        <div class="statement-words" id="statementWords">
+            <!-- Words will be populated by JS -->
+        </div>
+        <div class="statement-badge" id="statementBadge">Wealth ENsurance</div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <p class="section-label">What We Do</p>
+            <h2 class="section-title">Our Services Were Designed To Allow<br>You To Sleep At Night.</h2>
+            <div class="gold-divider"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <span class="service-number">01</span>
+                <h3>Asset Protection</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">02</span>
+                <h3>OnShore Services</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">03</span>
+                <h3>OffShore Services</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">04</span>
+                <h3>Business Formation</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">05</span>
+                <h3>Estate Planning</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">06</span>
+                <h3>Business Advisor</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- URGENT CTA SECTION -->
+    <section class="urgent-section">
+        <div class="urgent-bg-text">PROTECT</div>
+        <div class="urgent-content">
+            <p class="section-label">Immediate Assistance</p>
+            <p class="urgent-text">
+                If you anticipate that you will shortly be involved in a <span class="gold">Divorce</span>,
+                <span class="gold">Paternity Action</span>, <span class="gold">Partnership Dissolution</span>,
+                or any other civil action, you should <span class="gold">call us immediately</span>.
+            </p>
+            <a href="#contact" class="btn-primary">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- ATHLETES SECTION -->
+    <section class="athletes-section">
+        <div class="athletes-content">
+            <div class="athletes-text">
+                <p class="section-label">Specialized Expertise</p>
+                <h2>Athletes and <em>Entertainers</em></h2>
+                <p>Although we specialize in handling Athletes and Entertainers, our discreet and confidential services are available to all who need us.</p>
+                <p>Think of what we do as 'Wealth ENsurance'.</p>
+                <div class="service-tags">
+                    <span class="service-tag">Onshore Planning</span>
+                    <span class="service-tag">Offshore Planning</span>
+                    <span class="service-tag">Business Advisory</span>
+                    <span class="service-tag">Asset Protection</span>
+                    <span class="service-tag">Estate Planning</span>
+                </div>
+            </div>
+            <div class="athletes-visual">
+                <div class="vault-mini">
+                    <div class="vault-mini-ring"></div>
+                    <div class="vault-mini-ring"></div>
+                    <div class="vault-mini-ring"></div>
+                    <div class="vault-mini-center">
+                        <div class="vault-mini-center-text">Wealth<br>ENsurance</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="testimonial">
+        <div class="testimonial-content">
+            <div class="quote-icon">&ldquo;</div>
+            <p class="testimonial-quote" id="testimonialQuote">
+                "Rupert has been the driving force in what is a true expert in the fields of consulting, asset protection, entertainment and punching through loop holes in the system. We were in a real estate rut at one point and Rupert's know how got us out of it. He is really someone you can rely on when it comes to real estate, tax haven information and artist creation."
+            </p>
+            <p class="testimonial-author">Marian P.</p>
+            <p class="testimonial-title">Co-Founder, The Monaco Strategy Group</p>
+        </div>
+    </section>
+
+    <!-- RESOURCES SECTION -->
+    <section class="resources">
+        <div class="section-header">
+            <p class="section-label">Resources</p>
+            <h2 class="section-title">Knowledge Center</h2>
+            <div class="gold-divider"></div>
+        </div>
+        <div class="resources-grid">
+            <div class="resource-card">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Myths About Asset Protection</h4>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Own Nothing. Control Everything</h4>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Cost of Asset Protection Services</h4>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Land Trust Structure To Protect Real Property</h4>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Rupert Francisco, JD</h4>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Private Single Family Trust Company</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="logo">JE Holdings<span>LLC</span></div>
+                <p>Think of what we do as 'Wealth ENsurance'.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h5>Navigation</h5>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#principal">Our Principal</a></li>
+                        <li><a href="#">Payment</a></li>
+                        <li><a href="#">Legal Notice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Services</h5>
+                    <ul>
+                        <li><a href="#">OnShore Services</a></li>
+                        <li><a href="#">OffShore Services</a></li>
+                        <li><a href="#">Business Advisor</a></li>
+                        <li><a href="#">Business Formation</a></li>
+                        <li><a href="#">Estate Planning</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 1995-2026 JE Holdings, LLC. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // ================================================================
+        // VAULT LOADING SCREEN SEQUENCE
+        // ================================================================
+        const loader = document.getElementById('vaultLoader');
+
+        // After 2.5s, start opening the vault
+        setTimeout(() => {
+            loader.classList.add('opening');
+        }, 2500);
+
+        // After vault opens (2.5s + 2.5s animation), fade out loader
+        setTimeout(() => {
+            loader.classList.add('done');
+            document.body.classList.remove('loading');
+        }, 5500);
+
+        // Remove loader from DOM
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 6500);
+
+        // ================================================================
+        // GOLD PARTICLES
+        // ================================================================
+        const particlesContainer = document.getElementById('particles');
+        function createParticles() {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 3 + 1) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // ================================================================
+        // NAVBAR SCROLL
+        // ================================================================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ================================================================
+        // WORD-BY-WORD STATEMENT REVEAL
+        // ================================================================
+        const statementText = "Whatever they are, we can help. From Business Formation to Estate Planning, Business Advisory strategies, and highly sophisticated Onshore and Offshore Planning, we have a wide range of vehicles to accomplish each and all of your goals.";
+        const goldWords = ['Business', 'Formation', 'Estate', 'Planning,', 'Planning', 'Advisory', 'Onshore', 'Offshore'];
+        const statementContainer = document.getElementById('statementWords');
+
+        statementText.split(' ').forEach(word => {
+            const span = document.createElement('span');
+            span.classList.add('word');
+            const cleanWord = word.replace(/[.,]/g, '');
+            if (goldWords.includes(cleanWord) || goldWords.includes(word)) {
+                span.classList.add('gold');
+            }
+            span.textContent = word + ' ';
+            statementContainer.appendChild(span);
+        });
+
+        // ================================================================
+        // SCROLL-TRIGGERED ANIMATIONS
+        // ================================================================
+        function animateOnScroll() {
+            const words = document.querySelectorAll('.statement-words .word');
+            const statementRect = statementContainer.getBoundingClientRect();
+            const statementCenter = statementRect.top + statementRect.height / 2;
+            const viewCenter = window.innerHeight / 2;
+            const progress = Math.max(0, Math.min(1, 1 - (statementCenter - viewCenter) / (window.innerHeight * 0.4)));
+
+            const wordsToShow = Math.floor(progress * words.length);
+            words.forEach((word, i) => {
+                word.classList.toggle('visible', i < wordsToShow);
+            });
+
+            const badge = document.getElementById('statementBadge');
+            badge.classList.toggle('visible', progress > 0.9);
+
+            // Service cards staggered
+            document.querySelectorAll('.service-card').forEach((card, i) => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 80) {
+                    setTimeout(() => card.classList.add('animated'), i * 100);
+                }
+            });
+
+            // Resource cards staggered
+            document.querySelectorAll('.resource-card').forEach((card, i) => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 80) {
+                    setTimeout(() => card.classList.add('animated'), i * 80);
+                }
+            });
+
+            // Testimonial
+            const testimonial = document.getElementById('testimonialQuote');
+            if (testimonial) {
+                const tRect = testimonial.getBoundingClientRect();
+                if (tRect.top < window.innerHeight - 100) {
+                    testimonial.classList.add('animated');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+
+        // ================================================================
+        // PARALLAX ON MOUSE MOVE (hero section)
+        // ================================================================
+        const heroContent = document.querySelector('.hero-content');
+        document.querySelector('.hero').addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 10;
+            const y = (e.clientY / window.innerHeight - 0.5) * 10;
+            heroContent.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+
+</body>
+</html>

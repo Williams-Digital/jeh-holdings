@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JE Holdings, LLC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8D5A3;
+            --gold-dark: #8B7331;
+            --navy: #0A1628;
+            --navy-mid: #12243B;
+            --navy-light: #1B3A5C;
+            --white: #F5F0E8;
+            --pure-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* ========== NAVIGATION ========== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 60px;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--white);
+            font-weight: 400;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            display: block;
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 28px;
+            border: 1px solid var(--gold);
+            color: var(--gold) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold);
+            color: var(--navy) !important;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-vault-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 45%, rgba(18, 36, 59, 0.3) 0%, var(--navy) 70%);
+            z-index: 2;
+        }
+
+        /* CSS Vault Door */
+        .vault-visual {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            z-index: 1;
+            opacity: 0.12;
+        }
+
+        .vault-door {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid var(--gold);
+            position: relative;
+            box-shadow:
+                0 0 60px rgba(201, 168, 76, 0.1),
+                inset 0 0 60px rgba(201, 168, 76, 0.05);
+        }
+
+        .vault-door::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65%;
+            height: 65%;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+        }
+
+        .vault-door::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+        }
+
+        .vault-spoke {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 2px;
+            background: var(--gold);
+            transform-origin: center;
+        }
+
+        .vault-spoke:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
+        .vault-spoke:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg); }
+        .vault-spoke:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg); }
+        .vault-spoke:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg); }
+
+        .vault-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 4px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vault-handle-inner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border: 1px solid rgba(201, 168, 76, 0.4);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.3s forwards;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1.05;
+            color: var(--pure-white);
+            letter-spacing: -1px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.6s forwards;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-size: 1.15rem;
+            font-weight: 300;
+            color: rgba(245, 240, 232, 0.7);
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto 50px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.9s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.2s forwards;
+        }
+
+        .btn-primary {
+            padding: 16px 48px;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--gold);
+        }
+
+        .btn-secondary {
+            padding: 16px 48px;
+            background: transparent;
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid rgba(245, 240, 232, 0.3);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.5s forwards;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.2); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== STATEMENT SECTION ========== */
+        .statement {
+            padding: 140px 60px;
+            text-align: center;
+            position: relative;
+            background: var(--navy);
+        }
+
+        .statement::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, transparent, var(--gold));
+        }
+
+        .statement-text {
+            max-width: 900px;
+            margin: 0 auto;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--white);
+        }
+
+        .statement-text .gold {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .statement-badge {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 32px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* ========== SERVICES SECTION ========== */
+        .services {
+            padding: 120px 60px;
+            background: var(--navy-mid);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--pure-white);
+            line-height: 1.2;
+        }
+
+        .gold-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+            margin: 25px auto 0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(10, 22, 40, 0.6);
+            border: 1px solid rgba(201, 168, 76, 0.1);
+            padding: 50px 40px;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .service-card:hover {
+            border-color: rgba(201, 168, 76, 0.3);
+            transform: translateY(-5px);
+            background: rgba(18, 36, 59, 0.8);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--pure-white);
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: rgba(245, 240, 232, 0.6);
+        }
+
+        /* ========== URGENT CTA SECTION ========== */
+        .urgent-section {
+            padding: 120px 60px;
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .urgent-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.03) 0%, transparent 70%);
+        }
+
+        .urgent-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .urgent-content .section-label {
+            margin-bottom: 30px;
+        }
+
+        .urgent-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--white);
+            margin-bottom: 50px;
+        }
+
+        .urgent-text .gold {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ========== ATHLETES SECTION ========== */
+        .athletes-section {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy) 100%);
+            position: relative;
+        }
+
+        .athletes-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .athletes-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--pure-white);
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .athletes-text h2 em {
+            font-style: normal;
+            color: var(--gold);
+        }
+
+        .athletes-text p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(245, 240, 232, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .athletes-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-block {
+            padding: 30px 35px;
+            background: rgba(201, 168, 76, 0.05);
+            border-left: 3px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .stat-block:hover {
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .stat-block h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .stat-block p {
+            font-size: 0.85rem;
+            color: rgba(245, 240, 232, 0.6);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ========== TESTIMONIAL ========== */
+        .testimonial {
+            padding: 140px 60px;
+            background: var(--navy);
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '\201C';
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 12rem;
+            color: rgba(201, 168, 76, 0.08);
+            line-height: 1;
+        }
+
+        .testimonial-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.8;
+            color: var(--white);
+            margin-bottom: 40px;
+        }
+
+        .testimonial-author {
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .testimonial-title {
+            color: rgba(245, 240, 232, 0.5);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* ========== RESOURCES SECTION ========== */
+        .resources {
+            padding: 120px 60px;
+            background: var(--navy-mid);
+        }
+
+        .resources-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .resource-card {
+            padding: 35px 30px;
+            border: 1px solid rgba(201, 168, 76, 0.12);
+            background: rgba(10, 22, 40, 0.4);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .resource-card:hover {
+            border-color: var(--gold);
+            background: rgba(201, 168, 76, 0.05);
+        }
+
+        .resource-icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .resource-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: var(--pure-white);
+            font-weight: 600;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 80px 60px 40px;
+            background: var(--navy);
+            border-top: 1px solid rgba(201, 168, 76, 0.1);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            color: rgba(245, 240, 232, 0.4);
+            font-size: 0.85rem;
+            max-width: 300px;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 60px;
+        }
+
+        .footer-col h5 {
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            text-decoration: none;
+            color: rgba(245, 240, 232, 0.5);
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid rgba(245, 240, 232, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            color: rgba(245, 240, 232, 0.3);
+            font-size: 0.8rem;
+        }
+
+        /* ========== SCROLL ANIMATIONS ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 968px) {
+            .hero h1 { font-size: 3.5rem; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .resources-grid { grid-template-columns: repeat(2, 1fr); }
+            .athletes-content { grid-template-columns: 1fr; gap: 50px; }
+            nav { padding: 15px 30px; }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.5rem; }
+            .statement-text { font-size: 1.4rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .resources-grid { grid-template-columns: 1fr; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .section-title { font-size: 2.2rem; }
+            .footer-top { flex-direction: column; gap: 40px; }
+            .footer-links { gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+        <div class="logo">JE Holdings<span>LLC</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#principal">Our Principal</a></li>
+            <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="vault-visual">
+            <div class="vault-door">
+                <div class="vault-spoke"></div>
+                <div class="vault-spoke"></div>
+                <div class="vault-spoke"></div>
+                <div class="vault-spoke"></div>
+                <div class="vault-handle">
+                    <div class="vault-handle-inner"></div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-vault-bg"></div>
+        <div class="hero-content">
+            <div class="hero-badge">Wealth ENsurance</div>
+            <h1>Own Nothing.<br><em>Control Everything.</em></h1>
+            <p class="hero-sub">At J.E. Holding, LLC., we can structure, on an expedited basis, a plan that meets all your needs.</p>
+            <div class="hero-buttons">
+                <a href="#services" class="btn-primary">View Services</a>
+                <a href="#about" class="btn-secondary">Discover More</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- STATEMENT SECTION -->
+    <section class="statement" id="about">
+        <div class="reveal">
+            <p class="statement-text">
+                Whatever they are, we can help. From <span class="gold">Business Formation</span> to
+                <span class="gold">Estate Planning</span>, <span class="gold">Business Advisory</span> strategies,
+                and highly sophisticated <span class="gold">Onshore</span> and <span class="gold">Offshore Planning</span>,
+                we have a wide range of vehicles to accomplish each and all of your goals.
+            </p>
+            <div class="statement-badge">Wealth ENsurance</div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="services" id="services">
+        <div class="section-header reveal">
+            <p class="section-label">What We Do</p>
+            <h2 class="section-title">Our Services Were Designed To Allow<br>You To Sleep At Night.</h2>
+            <div class="gold-divider"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <div class="service-icon">&#9670;</div>
+                <h3>Asset Protection</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">&#9670;</div>
+                <h3>OnShore Services</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">&#9670;</div>
+                <h3>OffShore Services</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">&#9670;</div>
+                <h3>Business Formation</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">&#9670;</div>
+                <h3>Estate Planning</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">&#9670;</div>
+                <h3>Business Advisor</h3>
+                <p>Our fees are competitive and our services are of the highest quality.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- URGENT CTA SECTION -->
+    <section class="urgent-section">
+        <div class="urgent-content reveal">
+            <p class="section-label">Immediate Assistance</p>
+            <p class="urgent-text">
+                If you anticipate that you will shortly be involved in a <span class="gold">Divorce</span>,
+                <span class="gold">Paternity Action</span>, <span class="gold">Partnership Dissolution</span>,
+                or any other civil action, you should <span class="gold">call us immediately</span>.
+            </p>
+            <a href="#contact" class="btn-primary">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- ATHLETES SECTION -->
+    <section class="athletes-section">
+        <div class="athletes-content">
+            <div class="athletes-text reveal">
+                <h2>Athletes and <em>Entertainers</em></h2>
+                <p>Although we specialize in handling Athletes and Entertainers, our discreet and confidential services are available to all who need us.</p>
+                <p>Think of what we do as 'Wealth ENsurance'.</p>
+            </div>
+            <div class="athletes-visual reveal">
+                <div class="stat-block">
+                    <h4>Onshore Planning</h4>
+                    <p>Domestic asset and business protection</p>
+                </div>
+                <div class="stat-block">
+                    <h4>Offshore Planning</h4>
+                    <p>International planning structures</p>
+                </div>
+                <div class="stat-block">
+                    <h4>Business Advisory</h4>
+                    <p>Consulting and strategic guidance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="testimonial">
+        <div class="testimonial-content reveal">
+            <p class="testimonial-quote">
+                "Rupert has been the driving force in what is a true expert in the fields of consulting, asset protection, entertainment and punching through loop holes in the system. We were in a real estate rut at one point and Rupert's know how got us out of it. He is really someone you can rely on when it comes to real estate, tax haven information and artist creation."
+            </p>
+            <p class="testimonial-author">Marian P.</p>
+            <p class="testimonial-title">Co-Founder, The Monaco Strategy Group</p>
+        </div>
+    </section>
+
+    <!-- RESOURCES SECTION -->
+    <section class="resources">
+        <div class="section-header reveal">
+            <p class="section-label">Resources</p>
+            <h2 class="section-title">Knowledge Center</h2>
+            <div class="gold-divider"></div>
+        </div>
+        <div class="resources-grid">
+            <div class="resource-card reveal">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Myths About Asset Protection</h4>
+            </div>
+            <div class="resource-card reveal">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Own Nothing. Control Everything</h4>
+            </div>
+            <div class="resource-card reveal">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Cost of Asset Protection Services</h4>
+            </div>
+            <div class="resource-card reveal">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Land Trust Structure To Protect Real Property</h4>
+            </div>
+            <div class="resource-card reveal">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Rupert Francisco, JD</h4>
+            </div>
+            <div class="resource-card reveal">
+                <div class="resource-icon">&#9724;</div>
+                <h4>Private Single Family Trust Company</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="logo">JE Holdings<span>LLC</span></div>
+                <p>Think of what we do as 'Wealth ENsurance'.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h5>Navigation</h5>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#principal">Our Principal</a></li>
+                        <li><a href="#">Payment</a></li>
+                        <li><a href="#">Legal Notice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Services</h5>
+                    <ul>
+                        <li><a href="#">OnShore Services</a></li>
+                        <li><a href="#">OffShore Services</a></li>
+                        <li><a href="#">Business Advisor</a></li>
+                        <li><a href="#">Business Formation</a></li>
+                        <li><a href="#">Estate Planning</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 1995-2026 JE Holdings, LLC. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll reveal animations
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const revealPoint = 120;
+                if (elementTop < windowHeight - revealPoint) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+
+        // Slow vault rotation
+        const vault = document.querySelector('.vault-visual');
+        let rotation = 0;
+        function rotateVault() {
+            rotation += 0.02;
+            vault.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            requestAnimationFrame(rotateVault);
+        }
+        rotateVault();
+    </script>
+
+</body>
+</html>
