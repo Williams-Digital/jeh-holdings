@@ -882,7 +882,71 @@
         <p>&copy; 2026 All Rights Reserved &nbsp;|&nbsp; <a href="jeh_option1.html">Return to JE Holdings Website</a> &nbsp;|&nbsp; <a href="client-agreement.html">View Service Agreement</a></p>
     </div>
 
+    <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
+
     <script>
+        // Confetti
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        let confettiPieces = [];
+        let animating = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function launchConfetti() {
+            confettiPieces = [];
+            const colors = ['#C9A84C', '#E8D5A3', '#ffffff', '#8B7331', '#1B3A5C', '#F5F0E8'];
+            for (let i = 0; i < 150; i++) {
+                confettiPieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 6 + 3,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 3 + 2,
+                    drift: Math.random() * 2 - 1,
+                    rotation: Math.random() * 360,
+                    rotSpeed: Math.random() * 6 - 3,
+                    opacity: 1
+                });
+            }
+            animating = true;
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            if (!animating) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            confettiPieces.forEach(p => {
+                if (p.opacity <= 0) return;
+                active = true;
+                p.y += p.speed;
+                p.x += p.drift;
+                p.rotation += p.rotSpeed;
+                if (p.y > canvas.height - 100) p.opacity -= 0.02;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.globalAlpha = Math.max(0, p.opacity);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                ctx.restore();
+            });
+            if (active) {
+                requestAnimationFrame(animateConfetti);
+            } else {
+                animating = false;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // Form submission
         const form = document.getElementById('onboardingForm');
         const submitBtn = document.getElementById('submitBtn');
         const formStatus = document.getElementById('formStatus');
@@ -908,6 +972,7 @@
                     formStatusMsg.textContent = 'Onboarding form submitted successfully! We\'ll be in touch within 1-2 business days.';
                     submitBtn.textContent = 'Submitted';
                     form.querySelectorAll('textarea').forEach(t => t.disabled = true);
+                    launchConfetti();
                 } else {
                     formStatus.className = 'form-status error show';
                     formStatusMsg.textContent = 'Something went wrong. Please try again or email us directly.';
