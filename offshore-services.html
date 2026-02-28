@@ -158,6 +158,29 @@
             z-index: 0;
         }
 
+        /* Globe animation */
+        .hero-illustration {
+            position: absolute;
+            top: 50px;
+            left: -80px;
+            width: 420px;
+            height: 420px;
+            z-index: 0;
+            opacity: 0;
+            animation: globeFadeIn 1.5s ease 0.2s forwards;
+        }
+
+        .hero-illustration svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 60px rgba(201, 168, 76, 0.15));
+        }
+
+        @keyframes globeFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         .page-hero-content {
             position: relative;
             z-index: 1;
@@ -524,6 +547,7 @@
             .features-grid { grid-template-columns: 1fr; }
             nav { padding: 0 20px; }
             .nav-links { display: none; }
+            .hero-illustration { width: 300px; height: 300px; top: 20px; left: -60px; }
         }
 
         @media (max-width: 600px) {
@@ -534,6 +558,7 @@
             .cta-section { padding: 50px 20px; }
             .footer-top { flex-direction: column; gap: 30px; }
             .footer-links { gap: 25px; }
+            .hero-illustration { width: 220px; height: 220px; top: 10px; left: -40px; opacity: 0.5; }
         }
     </style>
 </head>
@@ -557,6 +582,69 @@
 
     <!-- PAGE HERO -->
     <section class="page-hero">
+        <!-- Animated Globe Illustration -->
+        <div class="hero-illustration">
+            <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="globeGold" x1="20%" y1="0%" x2="80%" y2="100%">
+                        <stop offset="0%" stop-color="#6B5A28"/>
+                        <stop offset="30%" stop-color="#C9A84C"/>
+                        <stop offset="50%" stop-color="#E8D5A3"/>
+                        <stop offset="70%" stop-color="#C9A84C"/>
+                        <stop offset="100%" stop-color="#6B5A28"/>
+                    </linearGradient>
+                    <radialGradient id="globeAmbient" cx="50%" cy="40%" r="50%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.1)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+                <!-- Ambient background -->
+                <circle cx="250" cy="250" r="240" fill="url(#globeAmbient)"/>
+                <!-- Pulsing rings -->
+                <circle cx="250" cy="250" r="160" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="1">
+                    <animate attributeName="r" values="160;230" dur="3s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.12;0" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="250" cy="250" r="160" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="1">
+                    <animate attributeName="r" values="160;240" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.08;0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <!-- Globe outer circle -->
+                <circle cx="250" cy="250" r="150" fill="rgba(201,168,76,0.03)" stroke="url(#globeGold)" stroke-width="2" opacity="0.7"/>
+                <!-- Globe meridian lines -->
+                <ellipse cx="250" cy="250" rx="150" ry="150" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+                <ellipse cx="250" cy="250" rx="90" ry="150" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+                <ellipse cx="250" cy="250" rx="40" ry="150" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="0.8"/>
+                <!-- Globe latitude lines -->
+                <ellipse cx="250" cy="250" rx="150" ry="40" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="0.8"/>
+                <ellipse cx="250" cy="200" rx="140" ry="30" fill="none" stroke="rgba(201,168,76,0.1)" stroke-width="0.6"/>
+                <ellipse cx="250" cy="300" rx="140" ry="30" fill="none" stroke="rgba(201,168,76,0.1)" stroke-width="0.6"/>
+                <ellipse cx="250" cy="160" rx="115" ry="20" fill="none" stroke="rgba(201,168,76,0.07)" stroke-width="0.5"/>
+                <ellipse cx="250" cy="340" rx="115" ry="20" fill="none" stroke="rgba(201,168,76,0.07)" stroke-width="0.5"/>
+                <!-- Rotating orbit ring -->
+                <g opacity="0.5">
+                    <ellipse cx="250" cy="250" rx="190" ry="60" fill="none" stroke="url(#globeGold)" stroke-width="1.5" stroke-dasharray="6 4" transform="rotate(-25 250 250)">
+                        <animateTransform attributeName="transform" type="rotate" values="-25 250 250;335 250 250" dur="60s" repeatCount="indefinite"/>
+                    </ellipse>
+                </g>
+                <!-- Orbit dot -->
+                <circle r="5" fill="url(#globeGold)" opacity="0.8">
+                    <animateMotion dur="60s" repeatCount="indefinite" path="M250,250 m-190,0 a190,60 -25 1,1 380,0 a190,60 -25 1,1 -380,0" />
+                    <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <!-- Center vertical axis -->
+                <line x1="250" y1="90" x2="250" y2="410" stroke="rgba(201,168,76,0.08)" stroke-width="0.8"/>
+                <!-- Decorative outer ring -->
+                <circle cx="250" cy="250" r="180" fill="none" stroke="rgba(201,168,76,0.05)" stroke-width="0.5" stroke-dasharray="3 8"/>
+                <!-- North/South pole dots -->
+                <circle cx="250" cy="100" r="3" fill="url(#globeGold)" opacity="0.5"/>
+                <circle cx="250" cy="400" r="3" fill="url(#globeGold)" opacity="0.5"/>
+            </svg>
+        </div>
         <div class="page-hero-content">
             <p class="breadcrumb">
                 <a href="jeh_option1.html">Home</a>

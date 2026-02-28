@@ -54,6 +54,30 @@
 
         .page-hero { padding: 140px 40px 70px; background: var(--navy); position: relative; overflow: hidden; text-align: center; }
         .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(27, 58, 92, 0.7) 0%, transparent 70%), radial-gradient(circle at 80% 20%, rgba(201, 168, 76, 0.06) 0%, transparent 40%); z-index: 0; }
+
+        /* Books animation */
+        .hero-illustration {
+            position: absolute;
+            top: 50px;
+            left: -80px;
+            width: 420px;
+            height: 420px;
+            z-index: 0;
+            opacity: 0;
+            animation: booksFadeIn 1.5s ease 0.2s forwards;
+        }
+
+        .hero-illustration svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 60px rgba(201, 168, 76, 0.15));
+        }
+
+        @keyframes booksFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         .page-hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
         .page-hero .breadcrumb { font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-light); margin-bottom: 24px; }
         .page-hero .breadcrumb a { color: var(--gold); text-decoration: none; transition: opacity 0.3s ease; }
@@ -99,8 +123,8 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        @media (max-width: 968px) { .page-hero h1 { font-size: 2.4rem; } nav { padding: 0 20px; } .nav-links { display: none; } }
-        @media (max-width: 600px) { .page-hero { padding: 120px 20px 50px; } .page-hero h1 { font-size: 1.8rem; letter-spacing: 1px; } .content-section { padding: 50px 20px; } .cta-section { padding: 50px 20px; } .footer-top { flex-direction: column; gap: 30px; } .footer-links { gap: 25px; } }
+        @media (max-width: 968px) { .page-hero h1 { font-size: 2.4rem; } nav { padding: 0 20px; } .nav-links { display: none; } .hero-illustration { width: 300px; height: 300px; top: 20px; left: -60px; } }
+        @media (max-width: 600px) { .page-hero { padding: 120px 20px 50px; } .page-hero h1 { font-size: 1.8rem; letter-spacing: 1px; } .content-section { padding: 50px 20px; } .cta-section { padding: 50px 20px; } .footer-top { flex-direction: column; gap: 30px; } .footer-links { gap: 25px; } .hero-illustration { width: 220px; height: 220px; top: 10px; left: -40px; opacity: 0.5; } }
     </style>
 </head>
 <body>
@@ -121,6 +145,100 @@
     </nav>
 
     <section class="page-hero">
+        <!-- Animated Books Illustration -->
+        <div class="hero-illustration">
+            <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="bookGold" x1="20%" y1="0%" x2="80%" y2="100%">
+                        <stop offset="0%" stop-color="#6B5A28"/>
+                        <stop offset="30%" stop-color="#C9A84C"/>
+                        <stop offset="50%" stop-color="#E8D5A3"/>
+                        <stop offset="70%" stop-color="#C9A84C"/>
+                        <stop offset="100%" stop-color="#6B5A28"/>
+                    </linearGradient>
+                    <radialGradient id="bookAmbient" cx="50%" cy="40%" r="50%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.1)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+                <!-- Ambient background -->
+                <circle cx="250" cy="250" r="240" fill="url(#bookAmbient)"/>
+                <!-- Pulsing rings -->
+                <circle cx="250" cy="250" r="140" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="1">
+                    <animate attributeName="r" values="140;220" dur="3s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.12;0" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="250" cy="250" r="140" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="1">
+                    <animate attributeName="r" values="140;230" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.08;0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <!-- Decorative ring -->
+                <circle cx="250" cy="250" r="180" fill="none" stroke="rgba(201,168,76,0.05)" stroke-width="0.5" stroke-dasharray="3 8"/>
+                <!-- Book stack - bottom book (widest) -->
+                <g opacity="0.5">
+                    <rect x="150" y="310" width="200" height="30" rx="3" fill="rgba(10,22,40,0.5)" stroke="rgba(201,168,76,0.25)" stroke-width="1.5"/>
+                    <line x1="155" y1="310" x2="155" y2="340" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+                    <!-- Spine detail -->
+                    <line x1="165" y1="315" x2="165" y2="335" stroke="rgba(201,168,76,0.1)" stroke-width="0.5"/>
+                </g>
+                <!-- Book stack - middle book -->
+                <g opacity="0.6">
+                    <rect x="160" y="278" width="185" height="30" rx="3" fill="rgba(10,22,40,0.5)" stroke="rgba(201,168,76,0.3)" stroke-width="1.5"/>
+                    <line x1="165" y1="278" x2="165" y2="308" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+                    <line x1="175" y1="283" x2="175" y2="303" stroke="rgba(201,168,76,0.1)" stroke-width="0.5"/>
+                </g>
+                <!-- Book stack - top book -->
+                <g opacity="0.7">
+                    <rect x="155" y="246" width="190" height="30" rx="3" fill="rgba(10,22,40,0.5)" stroke="url(#bookGold)" stroke-width="1.5"/>
+                    <line x1="160" y1="246" x2="160" y2="276" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+                    <line x1="170" y1="251" x2="170" y2="271" stroke="rgba(201,168,76,0.15)" stroke-width="0.5"/>
+                </g>
+                <!-- Open book on top -->
+                <g filter="url(#glow)" opacity="0.75">
+                    <!-- Left page -->
+                    <path d="M250 175 L170 185 L170 245 L250 235 Z" fill="rgba(10,22,40,0.4)" stroke="url(#bookGold)" stroke-width="1.5"/>
+                    <!-- Right page -->
+                    <path d="M250 175 L330 185 L330 245 L250 235 Z" fill="rgba(10,22,40,0.4)" stroke="url(#bookGold)" stroke-width="1.5"/>
+                    <!-- Spine -->
+                    <line x1="250" y1="175" x2="250" y2="235" stroke="url(#bookGold)" stroke-width="2"/>
+                    <!-- Text lines on left page -->
+                    <g stroke="rgba(201,168,76,0.15)" stroke-width="0.8">
+                        <line x1="185" y1="200" x2="240" y2="196"/>
+                        <line x1="186" y1="210" x2="238" y2="207"/>
+                        <line x1="187" y1="220" x2="235" y2="218"/>
+                    </g>
+                    <!-- Text lines on right page -->
+                    <g stroke="rgba(201,168,76,0.15)" stroke-width="0.8">
+                        <line x1="260" y1="196" x2="318" y2="200"/>
+                        <line x1="261" y1="207" x2="316" y2="210"/>
+                        <line x1="262" y1="218" x2="312" y2="220"/>
+                    </g>
+                    <!-- Glowing knowledge effect from open book -->
+                    <animate attributeName="opacity" values="0.6;0.85;0.6" dur="4s" repeatCount="indefinite"/>
+                </g>
+                <!-- Small floating wisdom dots above open book -->
+                <g opacity="0.3">
+                    <circle cx="230" cy="160" r="2" fill="url(#bookGold)">
+                        <animate attributeName="cy" values="160;150;160" dur="3s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="250" cy="150" r="1.5" fill="url(#bookGold)">
+                        <animate attributeName="cy" values="150;138;150" dur="3.5s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.15;0.4;0.15" dur="3.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="270" cy="155" r="2" fill="url(#bookGold)">
+                        <animate attributeName="cy" values="155;143;155" dur="2.8s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.2;0.45;0.2" dur="2.8s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+                <!-- Shelf line -->
+                <line x1="130" y1="345" x2="370" y2="345" stroke="rgba(201,168,76,0.12)" stroke-width="1.5"/>
+            </svg>
+        </div>
         <div class="page-hero-content">
             <p class="breadcrumb">
                 <a href="jeh_option1.html">Home</a>
