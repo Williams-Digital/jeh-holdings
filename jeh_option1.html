@@ -960,9 +960,334 @@
             .intro-text { font-size: 1rem; }
             .scroll-indicator { display: none; }
         }
+        /* ========== LOADING SCREEN ========== */
+        body:not(.loaded) {
+            overflow: hidden;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--navy);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+        }
+
+        .loading-screen.done {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loading-vault-wrap {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            opacity: 0;
+            animation: lvAppear 1s ease 0.3s forwards;
+        }
+
+        .loading-vault-wrap svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 60px rgba(201, 168, 76, 0.3)) drop-shadow(0 0 120px rgba(201, 168, 76, 0.15));
+        }
+
+        .loading-vault-wrap.vault-opening {
+            animation: lvVaultOpen 0.8s cubic-bezier(0.3, 0, 0.8, 1) forwards;
+        }
+
+        .loading-brand {
+            position: relative;
+            margin-top: 35px;
+            text-align: center;
+            opacity: 0;
+            animation: lvTextIn 0.6s ease 0.8s forwards;
+        }
+
+        .loading-brand h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .loading-brand p {
+            margin-top: 6px;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(201, 168, 76, 0.4);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 40px;
+            position: relative;
+            opacity: 0;
+            animation: lvTextIn 0.5s ease 1s forwards;
+        }
+
+        .loading-dots span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(201, 168, 76, 0.3);
+            animation: lvDotPulse 1.2s ease infinite;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        /* Loading screen keyframes */
+        @keyframes lvAppear {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes lvTextIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes lvDotPulse {
+            0%, 100% { background: rgba(201, 168, 76, 0.25); transform: scale(1); }
+            50% { background: rgba(201, 168, 76, 0.7); transform: scale(1.4); }
+        }
+
+        /* Vault wheel unlock spin */
+        .lv-wheel {
+            transform-origin: 300px 300px;
+            animation: lvUnlockSpin 2s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
+        }
+
+        @keyframes lvUnlockSpin {
+            0% { transform: rotate(0deg); }
+            65% { transform: rotate(540deg); }
+            82% { transform: rotate(525deg); }
+            100% { transform: rotate(540deg); }
+        }
+
+        /* Locking bars retract into center */
+        .lv-bars {
+            transform-origin: 300px 300px;
+            animation: lvBarsRetract 0.5s ease-in 3s forwards;
+        }
+
+        @keyframes lvBarsRetract {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* Vault door opens toward camera */
+        @keyframes lvVaultOpen {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(8); opacity: 0; }
+        }
+
+        /* Fade text/dots when vault opens */
+        .loading-screen.opening .loading-brand,
+        .loading-screen.opening .loading-dots {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0 !important;
+            transform: translateY(20px);
+        }
+
+        /* Gate hero animations behind loading completion */
+        body:not(.loaded) .hero-label,
+        body:not(.loaded) .hero h1,
+        body:not(.loaded) .hero-sub,
+        body:not(.loaded) .hero-buttons,
+        body:not(.loaded) .hero-services,
+        body:not(.loaded) .vault-bg,
+        body:not(.loaded) .vault-wheel,
+        body:not(.loaded) .scroll-indicator {
+            animation: none;
+        }
+
+        @media (max-width: 968px) {
+            .loading-vault-wrap { width: 220px; height: 220px; }
+        }
+
+        @media (max-width: 600px) {
+            .loading-vault-wrap { width: 180px; height: 180px; }
+            .loading-brand h2 { font-size: 1.2rem; letter-spacing: 3px; }
+        }
+
     </style>
 </head>
 <body>
+
+    <!-- LOADING SCREEN -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-vault-wrap" id="loadingVault">
+            <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="lvGlow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.12)"/>
+                        <stop offset="60%" stop-color="rgba(201,168,76,0.03)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                    <radialGradient id="lvFace" cx="45%" cy="42%" r="55%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.06)"/>
+                        <stop offset="50%" stop-color="rgba(201,168,76,0.02)"/>
+                        <stop offset="100%" stop-color="rgba(10,22,40,0.3)"/>
+                    </radialGradient>
+                    <linearGradient id="lvEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.5)"/>
+                        <stop offset="45%" stop-color="rgba(232,213,163,0.75)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.4)"/>
+                    </linearGradient>
+                    <linearGradient id="lvDim" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.2)"/>
+                        <stop offset="50%" stop-color="rgba(201,168,76,0.35)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.15)"/>
+                    </linearGradient>
+                    <linearGradient id="lvBarH" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="rgba(139,115,49,0.15)"/>
+                        <stop offset="20%" stop-color="rgba(201,168,76,0.5)"/>
+                        <stop offset="50%" stop-color="rgba(232,213,163,0.65)"/>
+                        <stop offset="80%" stop-color="rgba(201,168,76,0.5)"/>
+                        <stop offset="100%" stop-color="rgba(139,115,49,0.15)"/>
+                    </linearGradient>
+                    <linearGradient id="lvBarV" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(139,115,49,0.15)"/>
+                        <stop offset="20%" stop-color="rgba(201,168,76,0.5)"/>
+                        <stop offset="50%" stop-color="rgba(232,213,163,0.65)"/>
+                        <stop offset="80%" stop-color="rgba(201,168,76,0.5)"/>
+                        <stop offset="100%" stop-color="rgba(139,115,49,0.15)"/>
+                    </linearGradient>
+                    <filter id="lvGlowF">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Background glow -->
+                <circle cx="300" cy="300" r="295" fill="url(#lvGlow)"/>
+
+                <!-- Outer frame -->
+                <circle cx="300" cy="300" r="270" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="16"/>
+                <circle cx="300" cy="300" r="264" fill="none" stroke="url(#lvDim)" stroke-width="2.5"/>
+                <circle cx="300" cy="300" r="256" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+
+                <!-- Door face -->
+                <circle cx="300" cy="300" r="254" fill="url(#lvFace)"/>
+
+                <!-- Inner rings -->
+                <circle cx="300" cy="300" r="235" fill="none" stroke="rgba(201,168,76,0.1)" stroke-width="0.8"/>
+                <circle cx="300" cy="300" r="210" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="0.5" stroke-dasharray="3 6"/>
+
+                <!-- Bolt studs -->
+                <g opacity="0.7">
+                    <circle cx="300" cy="42" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                    <circle cx="300" cy="558" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                    <circle cx="558" cy="300" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                    <circle cx="42" cy="300" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                    <circle cx="482" cy="118" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                    <circle cx="118" cy="482" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                    <circle cx="482" cy="482" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                    <circle cx="118" cy="118" r="7" fill="url(#lvDim)" stroke="url(#lvEdge)" stroke-width="1"/>
+                </g>
+
+                <!-- Hinge plates -->
+                <g opacity="0.55">
+                    <rect x="32" y="168" width="34" height="64" rx="4" fill="rgba(10,22,40,0.5)" stroke="url(#lvEdge)" stroke-width="1.5"/>
+                    <circle cx="49" cy="220" r="4" fill="url(#lvEdge)"/>
+                    <circle cx="49" cy="180" r="4" fill="url(#lvEdge)"/>
+                </g>
+                <g opacity="0.55">
+                    <rect x="32" y="368" width="34" height="64" rx="4" fill="rgba(10,22,40,0.5)" stroke="url(#lvEdge)" stroke-width="1.5"/>
+                    <circle cx="49" cy="420" r="4" fill="url(#lvEdge)"/>
+                    <circle cx="49" cy="380" r="4" fill="url(#lvEdge)"/>
+                </g>
+
+                <!-- Locking bars (retract on unlock) -->
+                <g class="lv-bars">
+                    <!-- Horizontal bar -->
+                    <rect x="110" y="293" width="380" height="14" rx="7" fill="url(#lvBarH)" opacity="0.5"/>
+                    <line x1="120" y1="293" x2="480" y2="293" stroke="rgba(232,213,163,0.4)" stroke-width="0.8" filter="url(#lvGlowF)"/>
+                    <line x1="120" y1="307" x2="480" y2="307" stroke="rgba(232,213,163,0.3)" stroke-width="0.8" filter="url(#lvGlowF)"/>
+                    <!-- Vertical bar -->
+                    <rect x="293" y="110" width="14" height="380" rx="7" fill="url(#lvBarV)" opacity="0.5"/>
+                    <line x1="293" y1="120" x2="293" y2="480" stroke="rgba(232,213,163,0.4)" stroke-width="0.8" filter="url(#lvGlowF)"/>
+                    <line x1="307" y1="120" x2="307" y2="480" stroke="rgba(232,213,163,0.3)" stroke-width="0.8" filter="url(#lvGlowF)"/>
+                    <!-- Diagonal bars -->
+                    <line x1="170" y1="170" x2="430" y2="430" stroke="url(#lvEdge)" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
+                    <line x1="430" y1="170" x2="170" y2="430" stroke="url(#lvEdge)" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
+                </g>
+
+                <!-- Center wheel (spins to unlock) -->
+                <g class="lv-wheel">
+                    <circle cx="300" cy="300" r="92" fill="none" stroke="url(#lvEdge)" stroke-width="4" opacity="0.65"/>
+                    <circle cx="300" cy="300" r="86" fill="rgba(10,22,40,0.7)" stroke="url(#lvDim)" stroke-width="2"/>
+                    <!-- Spokes -->
+                    <g stroke="url(#lvEdge)" stroke-width="7" stroke-linecap="round" opacity="0.7">
+                        <line x1="300" y1="220" x2="300" y2="380"/>
+                        <line x1="220" y1="300" x2="380" y2="300"/>
+                        <line x1="243" y1="243" x2="357" y2="357"/>
+                        <line x1="357" y1="243" x2="243" y2="357"/>
+                    </g>
+                    <!-- Spoke glow -->
+                    <g stroke="rgba(232,213,163,0.5)" stroke-width="1" stroke-linecap="round" filter="url(#lvGlowF)" opacity="0.6">
+                        <line x1="300" y1="222" x2="300" y2="378"/>
+                        <line x1="222" y1="300" x2="378" y2="300"/>
+                        <line x1="245" y1="245" x2="355" y2="355"/>
+                        <line x1="355" y1="245" x2="245" y2="355"/>
+                    </g>
+                    <!-- Grip nodes -->
+                    <g opacity="0.7">
+                        <circle cx="300" cy="218" r="11" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="2"/>
+                        <circle cx="300" cy="382" r="11" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="2"/>
+                        <circle cx="218" cy="300" r="11" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="2"/>
+                        <circle cx="382" cy="300" r="11" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="2"/>
+                        <circle cx="242" cy="242" r="9" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="1.5"/>
+                        <circle cx="358" cy="358" r="9" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="1.5"/>
+                        <circle cx="358" cy="242" r="9" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="1.5"/>
+                        <circle cx="242" cy="358" r="9" fill="rgba(10,22,40,0.6)" stroke="url(#lvEdge)" stroke-width="1.5"/>
+                    </g>
+                    <!-- Center hub -->
+                    <circle cx="300" cy="300" r="34" fill="rgba(10,22,40,0.85)" stroke="url(#lvEdge)" stroke-width="3" opacity="0.8"/>
+                    <circle cx="300" cy="300" r="22" fill="none" stroke="url(#lvDim)" stroke-width="2" opacity="0.5"/>
+                    <circle cx="300" cy="300" r="8" fill="url(#lvEdge)" opacity="0.7"/>
+                </g>
+
+                <!-- Keyhole -->
+                <g opacity="0.5">
+                    <rect x="500" y="275" width="60" height="50" rx="5" fill="rgba(10,22,40,0.5)" stroke="url(#lvEdge)" stroke-width="1.5"/>
+                    <rect x="512" y="293" width="36" height="14" rx="3" fill="url(#lvDim)"/>
+                    <circle cx="522" cy="300" r="5" fill="url(#lvEdge)"/>
+                </g>
+
+                <!-- Ambient glow ring -->
+                <circle cx="300" cy="300" r="110" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="30"/>
+            </svg>
+        </div>
+        <div class="loading-brand">
+            <h2>JE Holdings</h2>
+            <p>Wealth ENsurance</p>
+        </div>
+        <div class="loading-dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
 
     <!-- NAVIGATION -->
     <nav id="navbar">
@@ -1422,6 +1747,27 @@
     </footer>
 
     <script>
+        // ========== LOADING SCREEN SEQUENCE ==========
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingVault = document.getElementById('loadingVault');
+
+        // Phase 1: After wheel spins + bars retract, trigger vault "open toward camera"
+        setTimeout(() => {
+            loadingScreen.classList.add('opening');
+            loadingVault.classList.add('vault-opening');
+        }, 3400);
+
+        // Phase 2: Hide loading screen, unlock hero animations
+        setTimeout(() => {
+            loadingScreen.classList.add('done');
+            document.body.classList.add('loaded');
+        }, 4100);
+
+        // Phase 3: Remove loading screen from DOM entirely
+        setTimeout(() => {
+            loadingScreen.remove();
+        }, 4800);
+
         // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
