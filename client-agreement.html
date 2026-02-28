@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Engagement Agreement — JE Holdings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8D5A3;
+            --gold-dark: #8B7331;
+            --navy: #0A1628;
+            --navy-mid: #12243B;
+            --navy-light: #1B3A5C;
+            --text: #F5F0E8;
+            --text-light: rgba(245, 240, 232, 0.6);
+            --bg: #0A1628;
+            --bg-light: #12243B;
+            --bg-dark: #060E1A;
+            --border: rgba(201, 168, 76, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Open Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* Header bar */
+        .contract-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            height: 70px;
+        }
+
+        .contract-header .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .contract-header .doc-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+        }
+
+        .contract-header .doc-label span {
+            color: var(--gold);
+        }
+
+        /* Hero */
+        .contract-hero {
+            padding: 130px 40px 50px;
+            background: var(--navy);
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contract-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(27, 58, 92, 0.5) 0%, transparent 70%);
+        }
+
+        .contract-hero-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contract-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .contract-hero h1 em {
+            font-style: normal;
+            color: var(--gold);
+        }
+
+        .contract-hero-sub {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+        }
+
+        .contract-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contract-meta-item {
+            text-align: center;
+        }
+
+        .contract-meta-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 4px;
+        }
+
+        .contract-meta-value {
+            font-size: 0.85rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .accent-divider {
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+            margin: 24px auto 0;
+        }
+
+        /* Contract body */
+        .contract-body {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 60px 40px 40px;
+        }
+
+        /* Section numbering */
+        .contract-section {
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .contract-section-num {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: rgba(201, 168, 76, 0.08);
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .contract-section h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            padding-left: 0;
+        }
+
+        .contract-section-divider {
+            width: 35px;
+            height: 2px;
+            background: var(--gold);
+            margin: 12px 0 20px;
+        }
+
+        .contract-section p {
+            font-size: 0.88rem;
+            line-height: 2;
+            color: rgba(245, 240, 232, 0.75);
+            margin-bottom: 16px;
+        }
+
+        .contract-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .contract-section strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .contract-section .gold {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Bullet list */
+        .contract-list {
+            list-style: none;
+            margin: 16px 0;
+            padding: 0;
+        }
+
+        .contract-list li {
+            position: relative;
+            padding-left: 24px;
+            font-size: 0.88rem;
+            line-height: 1.9;
+            color: rgba(245, 240, 232, 0.75);
+            margin-bottom: 10px;
+        }
+
+        .contract-list li::before {
+            content: '\25C6';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-size: 0.55rem;
+            top: 6px;
+        }
+
+        /* Sub-sections */
+        .contract-subsection {
+            padding: 20px 24px;
+            background: rgba(18, 36, 59, 0.4);
+            border-left: 3px solid var(--gold);
+            margin: 20px 0;
+        }
+
+        .contract-subsection h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .contract-subsection p {
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        /* Divider between major sections */
+        .section-break {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 50px 0;
+        }
+
+        /* Acceptance section */
+        .acceptance-section {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 40px 80px;
+        }
+
+        .acceptance-box {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .acceptance-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+        }
+
+        .acceptance-box h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .acceptance-box p {
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            max-width: 550px;
+            margin: 0 auto 28px;
+        }
+
+        .acceptance-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 0 auto 28px;
+            max-width: 500px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .acceptance-checkbox input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            border: 2px solid rgba(201, 168, 76, 0.4);
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            margin-top: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .acceptance-checkbox input[type="checkbox"]:checked {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .acceptance-checkbox input[type="checkbox"]:checked::after {
+            content: '\2713';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .acceptance-checkbox label {
+            font-size: 0.82rem;
+            line-height: 1.7;
+            color: rgba(245, 240, 232, 0.7);
+            cursor: pointer;
+        }
+
+        .btn-accept {
+            display: inline-block;
+            padding: 16px 48px;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .btn-accept.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-accept.enabled:hover {
+            background: transparent;
+            color: var(--gold);
+        }
+
+        .btn-accept.accepted {
+            background: transparent;
+            border-color: rgba(201, 168, 76, 0.4);
+            color: var(--gold);
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        /* Accepted state */
+        .acceptance-confirmed {
+            display: none;
+            margin-top: 24px;
+            padding: 16px 24px;
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            background: rgba(201, 168, 76, 0.05);
+        }
+
+        .acceptance-confirmed.show {
+            display: block;
+        }
+
+        .acceptance-confirmed p {
+            font-size: 0.8rem;
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .acceptance-confirmed .timestamp {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        /* Footer */
+        .contract-footer {
+            padding: 30px 40px;
+            background: var(--bg-dark);
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .contract-footer p {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.75rem;
+        }
+
+        .contract-footer a {
+            color: rgba(201, 168, 76, 0.5);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contract-footer a:hover {
+            color: var(--gold);
+        }
+
+        /* Print styles */
+        @media print {
+            .contract-header { position: static; background: white; border-bottom: 2px solid #333; }
+            .contract-header .logo-text { color: #333; }
+            .contract-header .doc-label { color: #666; }
+            .contract-header .doc-label span { color: #333; }
+            body { background: white; color: #333; }
+            .contract-hero { background: white; padding-top: 40px; border-bottom: 2px solid #ccc; }
+            .contract-hero::before { display: none; }
+            .contract-hero h1 { color: #333; }
+            .contract-hero h1 em { color: #8B7331; }
+            .contract-section h2 { color: #333; }
+            .contract-section p, .contract-list li { color: #444; }
+            .contract-section-num { color: rgba(0,0,0,0.06); }
+            .acceptance-section { display: none; }
+        }
+
+        @media (max-width: 968px) {
+            .contract-hero h1 { font-size: 2rem; }
+            .contract-header { padding: 0 20px; }
+        }
+
+        @media (max-width: 600px) {
+            .contract-hero { padding: 110px 20px 40px; }
+            .contract-hero h1 { font-size: 1.6rem; letter-spacing: 1px; }
+            .contract-body { padding: 40px 20px 20px; }
+            .acceptance-section { padding: 0 20px 60px; }
+            .acceptance-box { padding: 30px 20px; }
+            .contract-meta { gap: 20px; }
+            .contract-footer { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="contract-header">
+        <div class="logo-text">JE Holdings</div>
+        <div class="doc-label"><span>Client</span> Engagement Agreement</div>
+    </div>
+
+    <!-- HERO -->
+    <section class="contract-hero">
+        <div class="contract-hero-inner">
+            <h1>Client <em>Engagement</em> Agreement</h1>
+            <p class="contract-hero-sub">Professional Services Agreement between JE Holdings and Client</p>
+            <div class="accent-divider"></div>
+            <div class="contract-meta">
+                <div class="contract-meta-item">
+                    <p class="contract-meta-label">Effective Date</p>
+                    <p class="contract-meta-value" id="effectiveDate">Upon Acceptance</p>
+                </div>
+                <div class="contract-meta-item">
+                    <p class="contract-meta-label">Document Version</p>
+                    <p class="contract-meta-value">1.0</p>
+                </div>
+                <div class="contract-meta-item">
+                    <p class="contract-meta-label">Jurisdiction</p>
+                    <p class="contract-meta-value">United States</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTRACT BODY -->
+    <div class="contract-body">
+
+        <!-- 1. PARTIES -->
+        <div class="contract-section">
+            <div class="contract-section-num">01</div>
+            <h2>Parties</h2>
+            <div class="contract-section-divider"></div>
+            <p>This Client Engagement Agreement (the <strong>"Agreement"</strong>) is entered into by and between:</p>
+            <div class="contract-subsection">
+                <h4>Service Provider</h4>
+                <p><strong>JE Holdings</strong>, a consulting and advisory firm specializing in asset protection, estate planning, business formation, and related services (hereinafter referred to as <strong>"JE Holdings"</strong>, <strong>"we"</strong>, <strong>"us"</strong>, or <strong>"our"</strong>).</p>
+            </div>
+            <div class="contract-subsection">
+                <h4>Client</h4>
+                <p>The individual or entity accepting this Agreement by clicking the acknowledgment button below (hereinafter referred to as <strong>"Client"</strong>, <strong>"you"</strong>, or <strong>"your"</strong>).</p>
+            </div>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 2. SCOPE OF SERVICES -->
+        <div class="contract-section">
+            <div class="contract-section-num">02</div>
+            <h2>Scope of Services</h2>
+            <div class="contract-section-divider"></div>
+            <p>JE Holdings agrees to provide the Client with professional consulting and advisory services, which may include but are not limited to:</p>
+            <ul class="contract-list">
+                <li><strong>Asset Protection Planning</strong> — Structuring legal entities and strategies to shield assets from litigation, creditors, and unforeseen threats.</li>
+                <li><strong>Estate Planning</strong> — Developing comprehensive strategies including trusts, wills, and succession planning for wealth preservation and transfer.</li>
+                <li><strong>Business Formation</strong> — Strategic entity structuring optimized for liability protection, tax efficiency, and operational flexibility.</li>
+                <li><strong>OnShore Planning</strong> — Domestic planning structures including LLCs, trusts, and corporate entities within U.S. jurisdictions.</li>
+                <li><strong>OffShore Planning</strong> — International planning strategies leveraging global jurisdictions for additional privacy and asset security.</li>
+                <li><strong>Business Advisory</strong> — Expert consulting and strategic guidance for navigating complex financial landscapes.</li>
+            </ul>
+            <p>The specific services to be provided shall be determined in consultation between JE Holdings and the Client and may be further detailed in a separate Statement of Work or engagement letter.</p>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 3. FEES AND PAYMENT -->
+        <div class="contract-section">
+            <div class="contract-section-num">03</div>
+            <h2>Fees and Payment</h2>
+            <div class="contract-section-divider"></div>
+            <p>In consideration of the services provided, the Client agrees to compensate JE Holdings as follows:</p>
+
+            <div class="contract-subsection">
+                <h4>Fee Structure</h4>
+                <p>Fees for services shall be communicated to the Client prior to the commencement of work. All fees are quoted in United States Dollars (USD). The specific fee arrangement — whether flat fee, hourly, or project-based — will be outlined in the corresponding Statement of Work or discussed during the initial consultation.</p>
+            </div>
+
+            <div class="contract-subsection">
+                <h4>Payment Methods</h4>
+                <p>Payment may be submitted via the following accepted methods:</p>
+                <ul class="contract-list">
+                    <li><strong>Zelle Transfer</strong> — Send to <span class="gold">INFO@THEJEH.COM</span> (Recipient: J E Holdings)</li>
+                    <li><strong>Check</strong> — Make payable to <span class="gold">JE Holdings</span></li>
+                </ul>
+            </div>
+
+            <div class="contract-subsection">
+                <h4>Payment Terms</h4>
+                <p>Unless otherwise agreed in writing, all invoices are due upon receipt. A late fee of <strong>1.5% per month</strong> may be assessed on any balance remaining unpaid beyond thirty (30) days from the invoice date. JE Holdings reserves the right to suspend services for any account with an outstanding balance exceeding sixty (60) days.</p>
+            </div>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 4. CONFIDENTIALITY -->
+        <div class="contract-section">
+            <div class="contract-section-num">04</div>
+            <h2>Confidentiality</h2>
+            <div class="contract-section-divider"></div>
+            <p>Both parties acknowledge that in the course of this engagement, confidential and proprietary information may be disclosed. Each party agrees to:</p>
+            <ul class="contract-list">
+                <li>Maintain the <strong>strict confidentiality</strong> of all information received from the other party.</li>
+                <li>Not disclose, reproduce, or distribute any confidential information to any third party without the prior written consent of the disclosing party.</li>
+                <li>Use confidential information solely for the purposes of fulfilling obligations under this Agreement.</li>
+                <li>Take reasonable precautions to protect the confidentiality of the information, no less protective than those used for their own confidential information.</li>
+            </ul>
+            <p>This confidentiality obligation shall survive the termination of this Agreement and continue for a period of <strong>five (5) years</strong> following termination or expiration.</p>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 5. CLIENT RESPONSIBILITIES -->
+        <div class="contract-section">
+            <div class="contract-section-num">05</div>
+            <h2>Client Responsibilities</h2>
+            <div class="contract-section-divider"></div>
+            <p>To facilitate the effective delivery of services, the Client agrees to:</p>
+            <ul class="contract-list">
+                <li>Provide <strong>timely, accurate, and complete</strong> information as reasonably requested by JE Holdings.</li>
+                <li>Respond to communications and requests for information within a reasonable timeframe.</li>
+                <li>Designate a primary point of contact for all matters relating to this engagement.</li>
+                <li>Review and provide feedback on deliverables within the timeframes specified.</li>
+                <li>Comply with all applicable laws and regulations related to the services provided.</li>
+            </ul>
+            <p>Delays or failure to meet these responsibilities may impact the timeline and effectiveness of the services provided, and JE Holdings shall not be held liable for any resulting delays or diminished outcomes.</p>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 6. TERM AND TERMINATION -->
+        <div class="contract-section">
+            <div class="contract-section-num">06</div>
+            <h2>Term and Termination</h2>
+            <div class="contract-section-divider"></div>
+            <p>This Agreement shall become effective upon acceptance by the Client and shall remain in effect until the completion of the agreed-upon services, unless earlier terminated as follows:</p>
+
+            <div class="contract-subsection">
+                <h4>Termination by Either Party</h4>
+                <p>Either party may terminate this Agreement at any time by providing <strong>thirty (30) days</strong> written notice to the other party. Written notice shall be delivered via email to the designated contact addresses.</p>
+            </div>
+
+            <div class="contract-subsection">
+                <h4>Termination for Cause</h4>
+                <p>Either party may terminate this Agreement immediately upon written notice if the other party materially breaches any provision of this Agreement and fails to cure such breach within <strong>fifteen (15) days</strong> of receiving written notice of the breach.</p>
+            </div>
+
+            <div class="contract-subsection">
+                <h4>Effect of Termination</h4>
+                <p>Upon termination, the Client shall pay JE Holdings for all services rendered and expenses incurred up to the effective date of termination. All confidentiality obligations shall survive termination as specified in Section 4.</p>
+            </div>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 7. LIMITATION OF LIABILITY -->
+        <div class="contract-section">
+            <div class="contract-section-num">07</div>
+            <h2>Limitation of Liability</h2>
+            <div class="contract-section-divider"></div>
+            <p>JE Holdings provides consulting and advisory services based on current legal frameworks and best practices. To the maximum extent permitted by applicable law:</p>
+            <ul class="contract-list">
+                <li>JE Holdings shall not be liable for any <strong>indirect, incidental, special, consequential, or punitive damages</strong> arising out of or related to this Agreement.</li>
+                <li>JE Holdings' total aggregate liability under this Agreement shall not exceed the <strong>total fees paid by the Client</strong> under this Agreement during the twelve (12) month period preceding the claim.</li>
+                <li>JE Holdings does not provide legal advice or legal representation. Clients are encouraged to <strong>consult with qualified legal counsel</strong> regarding specific legal matters.</li>
+            </ul>
+            <p>The services provided are advisory in nature and do not constitute the practice of law. JE Holdings makes no guarantees regarding specific outcomes or results.</p>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 8. DISPUTE RESOLUTION -->
+        <div class="contract-section">
+            <div class="contract-section-num">08</div>
+            <h2>Dispute Resolution</h2>
+            <div class="contract-section-divider"></div>
+            <p>In the event of any dispute arising out of or relating to this Agreement, the parties agree to first attempt to resolve the matter through <strong>good faith negotiation</strong>. If the dispute cannot be resolved through negotiation within thirty (30) days, the parties agree to submit the dispute to <strong>binding arbitration</strong> in accordance with the rules of the American Arbitration Association.</p>
+            <p>The arbitration shall be conducted in the United States, and the decision of the arbitrator shall be final and binding upon both parties. Each party shall bear its own costs and expenses related to the arbitration, and the costs of the arbitrator shall be shared equally.</p>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 9. GOVERNING LAW -->
+        <div class="contract-section">
+            <div class="contract-section-num">09</div>
+            <h2>Governing Law</h2>
+            <div class="contract-section-divider"></div>
+            <p>This Agreement shall be governed by and construed in accordance with the <strong>laws of the United States</strong>, without regard to its conflict of laws principles. Any legal proceedings related to this Agreement shall be conducted within the appropriate jurisdictions of the United States.</p>
+        </div>
+
+        <hr class="section-break">
+
+        <!-- 10. GENERAL PROVISIONS -->
+        <div class="contract-section">
+            <div class="contract-section-num">10</div>
+            <h2>General Provisions</h2>
+            <div class="contract-section-divider"></div>
+            <ul class="contract-list">
+                <li><strong>Entire Agreement</strong> — This Agreement constitutes the entire agreement between the parties and supersedes all prior and contemporaneous agreements, understandings, and representations.</li>
+                <li><strong>Amendments</strong> — This Agreement may only be amended or modified in writing, signed by both parties.</li>
+                <li><strong>Severability</strong> — If any provision of this Agreement is found to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.</li>
+                <li><strong>Waiver</strong> — The failure of either party to enforce any right or provision of this Agreement shall not constitute a waiver of such right or provision.</li>
+                <li><strong>Assignment</strong> — The Client may not assign this Agreement without the prior written consent of JE Holdings. JE Holdings may assign this Agreement to any successor entity.</li>
+                <li><strong>Force Majeure</strong> — Neither party shall be liable for delays or failures in performance resulting from causes beyond their reasonable control, including but not limited to acts of God, natural disasters, war, terrorism, or government actions.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ACCEPTANCE SECTION -->
+    <div class="acceptance-section">
+        <div class="acceptance-box" id="acceptanceBox">
+            <h3>Acknowledgment &amp; Acceptance</h3>
+            <p>By checking the box below and clicking "I Accept", you acknowledge that you have read, understood, and agree to be bound by the terms and conditions of this Client Engagement Agreement.</p>
+
+            <div class="acceptance-checkbox">
+                <input type="checkbox" id="agreeCheckbox">
+                <label for="agreeCheckbox">I have read and understand this Client Engagement Agreement in its entirety, and I agree to all terms and conditions set forth herein.</label>
+            </div>
+
+            <button class="btn-accept" id="acceptBtn">I Accept This Agreement</button>
+
+            <div class="acceptance-confirmed" id="confirmationMsg">
+                <p>Agreement Accepted</p>
+                <p class="timestamp" id="acceptTimestamp"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="contract-footer">
+        <p>&copy; 1995-2026 JE Holdings. All Rights Reserved &nbsp;|&nbsp; <a href="jeh_option1.html">Return to Website</a> &nbsp;|&nbsp; <a href="legal-notice.html">Privacy Policy</a></p>
+    </div>
+
+    <script>
+        const checkbox = document.getElementById('agreeCheckbox');
+        const acceptBtn = document.getElementById('acceptBtn');
+        const confirmationMsg = document.getElementById('confirmationMsg');
+        const acceptTimestamp = document.getElementById('acceptTimestamp');
+
+        // Enable/disable accept button based on checkbox
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                acceptBtn.classList.add('enabled');
+            } else {
+                acceptBtn.classList.remove('enabled');
+            }
+        });
+
+        // Handle acceptance
+        acceptBtn.addEventListener('click', () => {
+            if (!checkbox.checked) return;
+
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' };
+            const formatted = now.toLocaleDateString('en-US', options);
+
+            acceptBtn.textContent = 'Agreement Accepted';
+            acceptBtn.classList.add('accepted');
+            checkbox.disabled = true;
+
+            acceptTimestamp.textContent = 'Accepted on ' + formatted;
+            confirmationMsg.classList.add('show');
+
+            // Update effective date in header
+            document.getElementById('effectiveDate').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        });
+    </script>
+
+</body>
+</html>
