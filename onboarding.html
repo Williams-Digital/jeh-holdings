@@ -308,8 +308,31 @@
         .question-item p {
             font-size: 0.83rem;
             color: rgba(245, 240, 232, 0.6);
-            margin-bottom: 0;
+            margin-bottom: 10px;
             line-height: 1.7;
+        }
+
+        .question-item textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            color: var(--text);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .question-item textarea::placeholder {
+            color: rgba(245, 240, 232, 0.25);
+        }
+
+        .question-item textarea:focus {
+            outline: none;
+            border-color: var(--gold);
         }
 
         /* Checklist */
@@ -392,6 +415,35 @@
             max-width: 450px;
             margin: 20px auto 0;
             line-height: 1.6;
+        }
+
+        .form-status {
+            display: none;
+            margin-top: 20px;
+            padding: 16px 24px;
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            background: rgba(201, 168, 76, 0.05);
+            text-align: center;
+        }
+
+        .form-status.show {
+            display: block;
+        }
+
+        .form-status p {
+            font-size: 0.85rem;
+            color: var(--gold);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .form-status.error {
+            border-color: rgba(220, 80, 80, 0.3);
+            background: rgba(220, 80, 80, 0.05);
+        }
+
+        .form-status.error p {
+            color: #dc5050;
         }
 
         .btn-primary {
@@ -526,248 +578,288 @@
 
         <hr class="section-break">
 
-        <!-- 2. BUSINESS INFORMATION -->
-        <div class="section">
-            <div class="section-num">02</div>
-            <h2>Business Information</h2>
-            <div class="section-divider"></div>
-            <p>Help us understand your business so we can tailor the website to your brand and audience.</p>
+        <form id="onboardingForm">
+            <input type="hidden" name="_subject" value="Client Onboarding — JE Holdings">
 
-            <div class="question-item">
-                <div class="q-label">Company Name</div>
-                <p>What is the full legal name of your business?</p>
+            <!-- 2. BUSINESS INFORMATION -->
+            <div class="section">
+                <div class="section-num">02</div>
+                <h2>Business Information</h2>
+                <div class="section-divider"></div>
+                <p>Help us understand your business so we can tailor the website to your brand and audience.</p>
+
+                <div class="question-item">
+                    <div class="q-label">Company Name</div>
+                    <p>What is the full legal name of your business?</p>
+                    <textarea name="company_name" placeholder="Enter your company name..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Industry &amp; Services</div>
+                    <p>What industry are you in and what services or products do you offer?</p>
+                    <textarea name="industry_services" placeholder="Describe your industry and services..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Target Audience</div>
+                    <p>Who are your ideal clients or customers? Describe their demographics, needs, and how they typically find you.</p>
+                    <textarea name="target_audience" placeholder="Describe your ideal clients..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Mission &amp; Vision</div>
+                    <p>What is your company's mission statement or core values? What message do you want your website to convey?</p>
+                    <textarea name="mission_vision" placeholder="Share your mission and vision..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Unique Value Proposition</div>
+                    <p>What sets you apart from competitors? Why should someone choose you over the alternatives?</p>
+                    <textarea name="unique_value" placeholder="What makes you different..."></textarea>
+                </div>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Industry &amp; Services</div>
-                <p>What industry are you in and what services or products do you offer?</p>
+            <hr class="section-break">
+
+            <!-- 3. BRAND & DESIGN PREFERENCES -->
+            <div class="section">
+                <div class="section-num">03</div>
+                <h2>Brand &amp; Design Preferences</h2>
+                <div class="section-divider"></div>
+                <p>Understanding your visual preferences helps us design a website that truly represents your brand.</p>
+
+                <div class="question-item">
+                    <div class="q-label">Existing Branding</div>
+                    <p>Do you have an existing logo, brand colors, or fonts? If so, please provide the files and any brand guidelines you may have.</p>
+                    <textarea name="existing_branding" placeholder="Describe your current branding..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Color Preferences</div>
+                    <p>What colors do you want your website to use? Are there any colors you specifically want to avoid?</p>
+                    <textarea name="color_preferences" placeholder="List preferred and disliked colors..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Style &amp; Mood</div>
+                    <p>How would you describe the look and feel you're going for? (e.g., modern and minimal, bold and corporate, warm and approachable, dark and luxurious)</p>
+                    <textarea name="style_mood" placeholder="Describe the look and feel..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Inspiration Sites</div>
+                    <p>Share 2-3 websites you admire. What do you like about them? This helps us understand your aesthetic preferences.</p>
+                    <textarea name="inspiration_sites" placeholder="List website URLs and what you like about them..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Competitors</div>
+                    <p>Who are your main competitors? Share their websites so we can understand your market and ensure your site stands out.</p>
+                    <textarea name="competitors" placeholder="List competitor names and websites..."></textarea>
+                </div>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Target Audience</div>
-                <p>Who are your ideal clients or customers? Describe their demographics, needs, and how they typically find you.</p>
+            <hr class="section-break">
+
+            <!-- 4. WEBSITE REQUIREMENTS -->
+            <div class="section">
+                <div class="section-num">04</div>
+                <h2>Website Requirements</h2>
+                <div class="section-divider"></div>
+                <p>Let us know what you need from your website so we can plan the right structure and features.</p>
+
+                <div class="question-item">
+                    <div class="q-label">Pages Needed</div>
+                    <p>What pages do you need? (e.g., Home, About, Services, Contact, Blog, FAQ, Team, Portfolio, Pricing)</p>
+                    <textarea name="pages_needed" placeholder="List the pages you need..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Features &amp; Functionality</div>
+                    <p>Are there specific features you need? (e.g., contact form, appointment booking, newsletter signup, social media feeds, client portal, payment integration)</p>
+                    <textarea name="features" placeholder="List any features or functionality..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Call to Action</div>
+                    <p>What is the primary action you want visitors to take on your website? (e.g., call you, fill out a form, schedule a consultation, make a purchase)</p>
+                    <textarea name="call_to_action" placeholder="What should visitors do on your site..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Existing Website</div>
+                    <p>Do you have a current website? If so, what do you like and dislike about it? What would you like to keep or change?</p>
+                    <textarea name="existing_website" placeholder="Share your current website URL and feedback..."></textarea>
+                </div>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Mission &amp; Vision</div>
-                <p>What is your company's mission statement or core values? What message do you want your website to convey?</p>
+            <hr class="section-break">
+
+            <!-- 5. CONTENT & ASSETS -->
+            <div class="section">
+                <div class="section-num">05</div>
+                <h2>Content &amp; Assets</h2>
+                <div class="section-divider"></div>
+                <p>Great content is the foundation of a great website. Let us know what you already have and what you'll need help with.</p>
+
+                <div class="question-item">
+                    <div class="q-label">Written Content</div>
+                    <p>Do you have written content (copy) ready for the website, or will you need assistance with copywriting?</p>
+                    <textarea name="written_content" placeholder="Describe your content situation..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Photos &amp; Images</div>
+                    <p>Do you have professional photos of your team, office, or products? If not, are you open to using high-quality stock photography?</p>
+                    <textarea name="photos_images" placeholder="Describe available photos or image needs..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Logo Files</div>
+                    <p>Please provide your logo in high-resolution format (PNG, SVG, or AI preferred). If you need a logo designed, let us know.</p>
+                    <textarea name="logo_files" placeholder="Describe your logo situation..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Social Media</div>
+                    <p>List all your social media profiles and any other online presence you'd like linked from the website.</p>
+                    <textarea name="social_media" placeholder="List your social media URLs..."></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="q-label">Testimonials &amp; Reviews</div>
+                    <p>Do you have client testimonials, case studies, or reviews you'd like featured on the website?</p>
+                    <textarea name="testimonials" placeholder="Share any testimonials or reviews..."></textarea>
+                </div>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Unique Value Proposition</div>
-                <p>What sets you apart from competitors? Why should someone choose you over the alternatives?</p>
-            </div>
-        </div>
+            <hr class="section-break">
 
-        <hr class="section-break">
+            <!-- 6. DOMAIN & HOSTING -->
+            <div class="section">
+                <div class="section-num">06</div>
+                <h2>Domain &amp; Hosting</h2>
+                <div class="section-divider"></div>
+                <p>We'll handle the technical setup — just let us know where things currently stand.</p>
 
-        <!-- 3. BRAND & DESIGN PREFERENCES -->
-        <div class="section">
-            <div class="section-num">03</div>
-            <h2>Brand &amp; Design Preferences</h2>
-            <div class="section-divider"></div>
-            <p>Understanding your visual preferences helps us design a website that truly represents your brand.</p>
+                <div class="question-item">
+                    <div class="q-label">Domain Name</div>
+                    <p>Do you already own a domain name? If so, what is it and where is it registered (e.g., GoDaddy, Namecheap, Google Domains)?</p>
+                    <textarea name="domain_name" placeholder="Enter your domain and registrar..."></textarea>
+                </div>
 
-            <div class="question-item">
-                <div class="q-label">Existing Branding</div>
-                <p>Do you have an existing logo, brand colors, or fonts? If so, please provide the files and any brand guidelines you may have.</p>
-            </div>
+                <div class="question-item">
+                    <div class="q-label">Preferred Domain</div>
+                    <p>If you don't have a domain, what domain name would you like? Provide a few options in case your first choice is unavailable.</p>
+                    <textarea name="preferred_domain" placeholder="List preferred domain options..."></textarea>
+                </div>
 
-            <div class="question-item">
-                <div class="q-label">Color Preferences</div>
-                <p>What colors do you want your website to use? Are there any colors you specifically want to avoid?</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Style &amp; Mood</div>
-                <p>How would you describe the look and feel you're going for? (e.g., modern and minimal, bold and corporate, warm and approachable, dark and luxurious)</p>
+                <div class="question-item">
+                    <div class="q-label">Email</div>
+                    <p>Do you have a professional email address (e.g., info@yourcompany.com)? Would you like us to set one up for you?</p>
+                    <textarea name="professional_email" placeholder="Enter your email situation..."></textarea>
+                </div>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Inspiration Sites</div>
-                <p>Share 2-3 websites you admire. What do you like about them? This helps us understand your aesthetic preferences.</p>
+            <hr class="section-break">
+
+            <!-- 7. ACCOUNT ACCESS -->
+            <div class="section">
+                <div class="section-num">07</div>
+                <h2>Account Access</h2>
+                <div class="section-divider"></div>
+                <p>To set up and manage your website, we may need access to the following accounts. Please share credentials securely — <strong>never send passwords in plain email</strong>.</p>
+
+                <div class="subsection">
+                    <h4>Secure Sharing</h4>
+                    <p>We recommend sharing credentials via a secure method such as a password manager sharing feature or an encrypted message. We will provide instructions on how to share securely.</p>
+                </div>
+
+                <ul class="list">
+                    <li><strong>Domain registrar</strong> — login to manage DNS settings</li>
+                    <li><strong>Current hosting provider</strong> — if migrating an existing site</li>
+                    <li><strong>Google Analytics</strong> — if you have an existing account</li>
+                    <li><strong>Google Business Profile</strong> — for local SEO management</li>
+                    <li><strong>Social media accounts</strong> — if integration or linking is needed</li>
+                    <li><strong>Email provider</strong> — if connecting professional email</li>
+                </ul>
+
+                <div class="question-item">
+                    <div class="q-label">Account Details</div>
+                    <p>List which accounts you have access to from the list above. Do not include passwords here — we will arrange secure sharing separately.</p>
+                    <textarea name="account_access" placeholder="List which accounts you have available..."></textarea>
+                </div>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Competitors</div>
-                <p>Who are your main competitors? Share their websites so we can understand your market and ensure your site stands out.</p>
-            </div>
-        </div>
+            <hr class="section-break">
 
-        <hr class="section-break">
+            <!-- 8. GOALS & SUCCESS -->
+            <div class="section">
+                <div class="section-num">08</div>
+                <h2>Goals &amp; Success Metrics</h2>
+                <div class="section-divider"></div>
+                <p>Understanding what success looks like for you helps us build a website that delivers real results.</p>
 
-        <!-- 4. WEBSITE REQUIREMENTS -->
-        <div class="section">
-            <div class="section-num">04</div>
-            <h2>Website Requirements</h2>
-            <div class="section-divider"></div>
-            <p>Let us know what you need from your website so we can plan the right structure and features.</p>
+                <div class="question-item">
+                    <div class="q-label">Primary Goal</div>
+                    <p>What is the #1 thing you want your website to accomplish? (e.g., generate leads, build credibility, sell products, inform clients)</p>
+                    <textarea name="primary_goal" placeholder="Describe your main website goal..."></textarea>
+                </div>
 
-            <div class="question-item">
-                <div class="q-label">Pages Needed</div>
-                <p>What pages do you need? (e.g., Home, About, Services, Contact, Blog, FAQ, Team, Portfolio, Pricing)</p>
-            </div>
+                <div class="question-item">
+                    <div class="q-label">Success Metrics</div>
+                    <p>How will you measure the website's success? (e.g., number of inquiries, page views, conversion rate, search ranking)</p>
+                    <textarea name="success_metrics" placeholder="How will you measure success..."></textarea>
+                </div>
 
-            <div class="question-item">
-                <div class="q-label">Features &amp; Functionality</div>
-                <p>Are there specific features you need? (e.g., contact form, appointment booking, newsletter signup, social media feeds, client portal, payment integration)</p>
-            </div>
+                <div class="question-item">
+                    <div class="q-label">SEO Goals</div>
+                    <p>Are there specific keywords or phrases you'd like your website to rank for in search engines?</p>
+                    <textarea name="seo_goals" placeholder="List target keywords or phrases..."></textarea>
+                </div>
 
-            <div class="question-item">
-                <div class="q-label">Call to Action</div>
-                <p>What is the primary action you want visitors to take on your website? (e.g., call you, fill out a form, schedule a consultation, make a purchase)</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Existing Website</div>
-                <p>Do you have a current website? If so, what do you like and dislike about it? What would you like to keep or change?</p>
-            </div>
-        </div>
-
-        <hr class="section-break">
-
-        <!-- 5. CONTENT & ASSETS -->
-        <div class="section">
-            <div class="section-num">05</div>
-            <h2>Content &amp; Assets</h2>
-            <div class="section-divider"></div>
-            <p>Great content is the foundation of a great website. Let us know what you already have and what you'll need help with.</p>
-
-            <div class="question-item">
-                <div class="q-label">Written Content</div>
-                <p>Do you have written content (copy) ready for the website, or will you need assistance with copywriting?</p>
+                <div class="question-item">
+                    <div class="q-label">Future Plans</div>
+                    <p>Are there features or pages you'd like to add in the future but don't need right now? This helps us build a flexible foundation.</p>
+                    <textarea name="future_plans" placeholder="Describe any future plans..."></textarea>
+                </div>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Photos &amp; Images</div>
-                <p>Do you have professional photos of your team, office, or products? If not, are you open to using high-quality stock photography?</p>
+            <hr class="section-break">
+
+            <!-- 9. NEXT STEPS CHECKLIST -->
+            <div class="section">
+                <div class="section-num">09</div>
+                <h2>Next Steps</h2>
+                <div class="section-divider"></div>
+                <p>To get started, please prepare the following items. You don't need everything at once — we'll work through these together.</p>
+
+                <ul class="checklist">
+                    <li>Complete the questionnaire sections above</li>
+                    <li>Gather your logo files (PNG, SVG, or AI format)</li>
+                    <li>Collect any photos or images you'd like to use</li>
+                    <li>Prepare written content for key pages (or let us know if you need help)</li>
+                    <li>List 2-3 websites you admire for design inspiration</li>
+                    <li>Confirm your domain name and registrar details</li>
+                    <li>Gather any account credentials to share securely</li>
+                    <li>Submit your 50% deposit to begin the project</li>
+                </ul>
             </div>
 
-            <div class="question-item">
-                <div class="q-label">Logo Files</div>
-                <p>Please provide your logo in high-resolution format (PNG, SVG, or AI preferred). If you need a logo designed, let us know.</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Social Media</div>
-                <p>List all your social media profiles and any other online presence you'd like linked from the website.</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Testimonials &amp; Reviews</div>
-                <p>Do you have client testimonials, case studies, or reviews you'd like featured on the website?</p>
-            </div>
-        </div>
-
-        <hr class="section-break">
-
-        <!-- 6. DOMAIN & HOSTING -->
-        <div class="section">
-            <div class="section-num">06</div>
-            <h2>Domain &amp; Hosting</h2>
-            <div class="section-divider"></div>
-            <p>We'll handle the technical setup — just let us know where things currently stand.</p>
-
-            <div class="question-item">
-                <div class="q-label">Domain Name</div>
-                <p>Do you already own a domain name? If so, what is it and where is it registered (e.g., GoDaddy, Namecheap, Google Domains)?</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Preferred Domain</div>
-                <p>If you don't have a domain, what domain name would you like? Provide a few options in case your first choice is unavailable.</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Email</div>
-                <p>Do you have a professional email address (e.g., info@yourcompany.com)? Would you like us to set one up for you?</p>
-            </div>
-        </div>
-
-        <hr class="section-break">
-
-        <!-- 7. ACCOUNT ACCESS -->
-        <div class="section">
-            <div class="section-num">07</div>
-            <h2>Account Access</h2>
-            <div class="section-divider"></div>
-            <p>To set up and manage your website, we may need access to the following accounts. Please share credentials securely — <strong>never send passwords in plain email</strong>.</p>
-
-            <div class="subsection">
-                <h4>Secure Sharing</h4>
-                <p>We recommend sharing credentials via a secure method such as a password manager sharing feature or an encrypted message. We will provide instructions on how to share securely.</p>
-            </div>
-
-            <ul class="list">
-                <li><strong>Domain registrar</strong> — login to manage DNS settings</li>
-                <li><strong>Current hosting provider</strong> — if migrating an existing site</li>
-                <li><strong>Google Analytics</strong> — if you have an existing account</li>
-                <li><strong>Google Business Profile</strong> — for local SEO management</li>
-                <li><strong>Social media accounts</strong> — if integration or linking is needed</li>
-                <li><strong>Email provider</strong> — if connecting professional email</li>
-            </ul>
-        </div>
-
-        <hr class="section-break">
-
-        <!-- 8. GOALS & SUCCESS -->
-        <div class="section">
-            <div class="section-num">08</div>
-            <h2>Goals &amp; Success Metrics</h2>
-            <div class="section-divider"></div>
-            <p>Understanding what success looks like for you helps us build a website that delivers real results.</p>
-
-            <div class="question-item">
-                <div class="q-label">Primary Goal</div>
-                <p>What is the #1 thing you want your website to accomplish? (e.g., generate leads, build credibility, sell products, inform clients)</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Success Metrics</div>
-                <p>How will you measure the website's success? (e.g., number of inquiries, page views, conversion rate, search ranking)</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">SEO Goals</div>
-                <p>Are there specific keywords or phrases you'd like your website to rank for in search engines?</p>
-            </div>
-
-            <div class="question-item">
-                <div class="q-label">Future Plans</div>
-                <p>Are there features or pages you'd like to add in the future but don't need right now? This helps us build a flexible foundation.</p>
-            </div>
-        </div>
-
-        <hr class="section-break">
-
-        <!-- 9. NEXT STEPS CHECKLIST -->
-        <div class="section">
-            <div class="section-num">09</div>
-            <h2>Next Steps</h2>
-            <div class="section-divider"></div>
-            <p>To get started, please prepare the following items. You don't need everything at once — we'll work through these together.</p>
-
-            <ul class="checklist">
-                <li>Complete the questionnaire sections above</li>
-                <li>Gather your logo files (PNG, SVG, or AI format)</li>
-                <li>Collect any photos or images you'd like to use</li>
-                <li>Prepare written content for key pages (or let us know if you need help)</li>
-                <li>List 2-3 websites you admire for design inspiration</li>
-                <li>Confirm your domain name and registrar details</li>
-                <li>Gather any account credentials to share securely</li>
-                <li>Submit your 50% deposit to begin the project</li>
-            </ul>
-        </div>
+        </form>
 
     </div>
 
     <!-- CTA SECTION -->
     <div class="cta-section">
         <div class="cta-box">
-            <h3>Ready to Get Started?</h3>
-            <p>Once you've reviewed the questionnaire above, click the button below to fill out and submit your responses directly.</p>
-            <a href="https://formspree.io/f/xkoveldn" target="_blank" class="btn-primary">Submit Your Responses</a>
-            <p class="note">This button will take you to a secure form where you can type in your answers to the questions outlined above. Once submitted, your responses will be sent directly to Williams Digital. We'll follow up within 1-2 business days to schedule your kickoff call.</p>
+            <h3>Submit Your Responses</h3>
+            <p>Once you've filled out the questionnaire above, click the button below to send your responses directly to Williams Digital.</p>
+            <button type="button" class="btn-primary" id="submitBtn">Submit Onboarding Form</button>
+            <div class="form-status" id="formStatus">
+                <p id="formStatusMsg"></p>
+            </div>
+            <p class="note">Your responses will be sent securely to Williams Digital. We'll follow up within 1-2 business days to schedule your kickoff call.</p>
         </div>
     </div>
 
@@ -775,6 +867,50 @@
     <div class="footer">
         <p>&copy; 2026 All Rights Reserved &nbsp;|&nbsp; <a href="jeh_option1.html">Return to JE Holdings Website</a> &nbsp;|&nbsp; <a href="client-agreement.html">View Service Agreement</a></p>
     </div>
+
+    <script>
+        const form = document.getElementById('onboardingForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formStatus = document.getElementById('formStatus');
+        const formStatusMsg = document.getElementById('formStatusMsg');
+
+        submitBtn.addEventListener('click', () => {
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.pointerEvents = 'none';
+
+            fetch('https://formspree.io/f/xkoveldn', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    formStatus.className = 'form-status show';
+                    formStatusMsg.textContent = 'Onboarding form submitted successfully! We\'ll be in touch within 1-2 business days.';
+                    submitBtn.textContent = 'Submitted';
+                    form.querySelectorAll('textarea').forEach(t => t.disabled = true);
+                } else {
+                    formStatus.className = 'form-status error show';
+                    formStatusMsg.textContent = 'Something went wrong. Please try again or email us directly.';
+                    submitBtn.textContent = 'Submit Onboarding Form';
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.pointerEvents = 'auto';
+                }
+            })
+            .catch(() => {
+                formStatus.className = 'form-status error show';
+                formStatusMsg.textContent = 'Connection error. Please check your internet and try again.';
+                submitBtn.textContent = 'Submit Onboarding Form';
+                submitBtn.style.opacity = '1';
+                submitBtn.style.pointerEvents = 'auto';
+            });
+        });
+    </script>
 
 </body>
 </html>
