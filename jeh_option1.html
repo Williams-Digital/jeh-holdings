@@ -155,28 +155,40 @@
             overflow: hidden;
         }
 
-        /* Background glow */
+        /* Background glow - dark brushed metal feel */
         .hero::before {
             content: '';
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse 60% 50% at 50% 45%, rgba(27, 58, 92, 0.7) 0%, transparent 70%),
-                radial-gradient(circle at 20% 80%, rgba(201, 168, 76, 0.06) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(201, 168, 76, 0.04) 0%, transparent 40%);
+                radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201, 168, 76, 0.06) 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(27, 58, 92, 0.5) 0%, transparent 50%);
             z-index: 0;
         }
 
-        /* Thin gold horizontal rule accents */
-        .hero-accent-line {
+        /* Vault illustration container */
+        .vault-bg {
             position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.2), transparent);
-            z-index: 1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 620px;
+            height: 620px;
+            z-index: 0;
+            opacity: 0;
+            animation: vaultFadeIn 1.5s ease 0.3s forwards;
         }
 
-        .hero-accent-line:nth-child(1) { width: 40%; top: 22%; left: 0; }
-        .hero-accent-line:nth-child(2) { width: 35%; bottom: 25%; right: 0; }
+        @keyframes vaultFadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .vault-bg svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 60px rgba(201, 168, 76, 0.15)) drop-shadow(0 0 120px rgba(201, 168, 76, 0.06));
+        }
 
         /* Corner brackets */
         .hero-corner {
@@ -874,7 +886,7 @@
             .hero h1 { font-size: 3rem; }
             .hero { min-height: 550px; }
             .hero-corner { display: none; }
-            .hero-accent-line { display: none; }
+            .vault-bg { width: 450px; height: 450px; }
             .services-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
             .resources-grid { grid-template-columns: repeat(2, 1fr); }
             .athletes-content { grid-template-columns: 1fr; gap: 40px; }
@@ -885,6 +897,7 @@
         @media (max-width: 600px) {
             .hero h1 { font-size: 2.2rem; letter-spacing: 1px; }
             .hero { padding: 90px 20px 50px; min-height: auto; height: auto; max-height: none; }
+            .vault-bg { width: 320px; height: 320px; opacity: 0.5; }
             .hero-services { display: none; }
             .services-grid { grid-template-columns: 1fr; }
             .resources-grid { grid-template-columns: 1fr; }
@@ -917,8 +930,138 @@
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
-        <div class="hero-accent-line"></div>
-        <div class="hero-accent-line"></div>
+        <!-- Bank Vault SVG Illustration -->
+        <div class="vault-bg">
+            <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="vaultGlow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.08)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                    <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#8B7331"/>
+                        <stop offset="30%" stop-color="#C9A84C"/>
+                        <stop offset="50%" stop-color="#E8D5A3"/>
+                        <stop offset="70%" stop-color="#C9A84C"/>
+                        <stop offset="100%" stop-color="#8B7331"/>
+                    </linearGradient>
+                    <linearGradient id="goldEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.4)"/>
+                        <stop offset="50%" stop-color="rgba(232,213,163,0.6)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.3)"/>
+                    </linearGradient>
+                    <linearGradient id="goldDim" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.15)"/>
+                        <stop offset="50%" stop-color="rgba(201,168,76,0.25)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.1)"/>
+                    </linearGradient>
+                    <linearGradient id="handleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.3)"/>
+                        <stop offset="40%" stop-color="rgba(232,213,163,0.5)"/>
+                        <stop offset="60%" stop-color="rgba(201,168,76,0.4)"/>
+                        <stop offset="100%" stop-color="rgba(139,115,49,0.3)"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Background glow -->
+                <circle cx="300" cy="300" r="290" fill="url(#vaultGlow)"/>
+
+                <!-- Outer door ring -->
+                <circle cx="300" cy="300" r="260" fill="none" stroke="url(#goldDim)" stroke-width="2"/>
+                <circle cx="300" cy="300" r="255" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="8"/>
+                <circle cx="300" cy="300" r="248" fill="none" stroke="url(#goldDim)" stroke-width="1"/>
+
+                <!-- Door face - subtle brushed texture -->
+                <circle cx="300" cy="300" r="245" fill="rgba(201,168,76,0.02)" stroke="none"/>
+
+                <!-- Inner ring detail -->
+                <circle cx="300" cy="300" r="220" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+                <circle cx="300" cy="300" r="200" fill="none" stroke="rgba(201,168,76,0.05)" stroke-width="0.5" stroke-dasharray="4 8"/>
+
+                <!-- Bolt studs around perimeter -->
+                <g fill="url(#goldEdge)" opacity="0.5">
+                    <circle cx="300" cy="48" r="5"/><circle cx="300" cy="552" r="5"/>
+                    <circle cx="552" cy="300" r="5"/><circle cx="48" cy="300" r="5"/>
+                    <circle cx="478" cy="122" r="5"/><circle cx="122" cy="478" r="5"/>
+                    <circle cx="478" cy="478" r="5"/><circle cx="122" cy="122" r="5"/>
+                    <circle cx="415" cy="72" r="4"/><circle cx="185" cy="528" r="4"/>
+                    <circle cx="528" cy="185" r="4"/><circle cx="72" cy="415" r="4"/>
+                    <circle cx="528" cy="415" r="4"/><circle cx="72" cy="185" r="4"/>
+                    <circle cx="415" cy="528" r="4"/><circle cx="185" cy="72" r="4"/>
+                </g>
+
+                <!-- Hinge plates - left side -->
+                <g opacity="0.35">
+                    <rect x="38" y="180" width="28" height="50" rx="3" fill="none" stroke="url(#goldEdge)" stroke-width="1.5"/>
+                    <rect x="42" y="186" width="20" height="6" rx="2" fill="rgba(201,168,76,0.3)"/>
+                    <rect x="42" y="198" width="20" height="6" rx="2" fill="rgba(201,168,76,0.3)"/>
+                    <rect x="42" y="210" width="20" height="6" rx="2" fill="rgba(201,168,76,0.3)"/>
+                    <circle cx="52" cy="218" r="3" fill="url(#goldEdge)"/>
+                    <circle cx="52" cy="192" r="3" fill="url(#goldEdge)"/>
+                </g>
+                <g opacity="0.35">
+                    <rect x="38" y="370" width="28" height="50" rx="3" fill="none" stroke="url(#goldEdge)" stroke-width="1.5"/>
+                    <rect x="42" y="376" width="20" height="6" rx="2" fill="rgba(201,168,76,0.3)"/>
+                    <rect x="42" y="388" width="20" height="6" rx="2" fill="rgba(201,168,76,0.3)"/>
+                    <rect x="42" y="400" width="20" height="6" rx="2" fill="rgba(201,168,76,0.3)"/>
+                    <circle cx="52" cy="408" r="3" fill="url(#goldEdge)"/>
+                    <circle cx="52" cy="382" r="3" fill="url(#goldEdge)"/>
+                </g>
+
+                <!-- Locking bars - horizontal -->
+                <g opacity="0.3">
+                    <rect x="140" y="296" width="320" height="8" rx="4" fill="url(#handleGrad)"/>
+                    <rect x="296" y="140" width="8" height="320" rx="4" fill="url(#handleGrad)"/>
+                </g>
+
+                <!-- Diagonal locking bars -->
+                <g opacity="0.2" stroke="url(#handleGrad)" stroke-width="6" stroke-linecap="round" fill="none">
+                    <line x1="180" y1="180" x2="420" y2="420"/>
+                    <line x1="420" y1="180" x2="180" y2="420"/>
+                </g>
+
+                <!-- Center handle assembly - outer ring -->
+                <circle cx="300" cy="300" r="85" fill="none" stroke="url(#goldEdge)" stroke-width="3" opacity="0.5"/>
+                <circle cx="300" cy="300" r="78" fill="rgba(10,22,40,0.6)" stroke="url(#goldDim)" stroke-width="1.5"/>
+
+                <!-- Handle spokes -->
+                <g stroke="url(#goldEdge)" stroke-width="4" stroke-linecap="round" opacity="0.6">
+                    <line x1="300" y1="228" x2="300" y2="372"/>
+                    <line x1="228" y1="300" x2="372" y2="300"/>
+                    <line x1="249" y1="249" x2="351" y2="351"/>
+                    <line x1="351" y1="249" x2="249" y2="351"/>
+                </g>
+
+                <!-- Handle center hub -->
+                <circle cx="300" cy="300" r="30" fill="rgba(10,22,40,0.8)" stroke="url(#goldEdge)" stroke-width="2.5" opacity="0.7"/>
+                <circle cx="300" cy="300" r="18" fill="none" stroke="url(#goldDim)" stroke-width="1.5" opacity="0.5"/>
+                <circle cx="300" cy="300" r="6" fill="url(#goldEdge)" opacity="0.6"/>
+
+                <!-- Handle grip nodes -->
+                <g fill="url(#goldEdge)" opacity="0.5">
+                    <circle cx="300" cy="228" r="8"/><circle cx="300" cy="372" r="8"/>
+                    <circle cx="228" cy="300" r="8"/><circle cx="372" cy="300" r="8"/>
+                    <circle cx="249" cy="249" r="6"/><circle cx="351" cy="351" r="6"/>
+                    <circle cx="351" cy="249" r="6"/><circle cx="249" cy="351" r="6"/>
+                </g>
+
+                <!-- Keyhole / lock plate at right side -->
+                <g opacity="0.35">
+                    <rect x="500" y="280" width="55" height="40" rx="4" fill="none" stroke="url(#goldEdge)" stroke-width="1.5"/>
+                    <rect x="510" y="294" width="35" height="12" rx="2" fill="rgba(201,168,76,0.2)"/>
+                    <circle cx="520" cy="300" r="4" fill="url(#goldEdge)"/>
+                </g>
+
+                <!-- Edge glow lines -->
+                <g opacity="0.15" stroke="url(#goldEdge)" stroke-width="1" fill="none">
+                    <path d="M 60 300 A 240 240 0 0 1 300 60" stroke-dasharray="2 6"/>
+                    <path d="M 540 300 A 240 240 0 0 1 300 540" stroke-dasharray="2 6"/>
+                </g>
+
+                <!-- Ambient glow around the wheel -->
+                <circle cx="300" cy="300" r="100" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="20"/>
+            </svg>
+        </div>
         <div class="hero-corner hero-corner--tl"></div>
         <div class="hero-corner hero-corner--br"></div>
         <div class="hero-content">
