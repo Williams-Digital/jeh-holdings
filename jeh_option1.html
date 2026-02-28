@@ -198,7 +198,7 @@
         .vault-bg svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 0 80px rgba(201, 168, 76, 0.2)) drop-shadow(0 0 160px rgba(201, 168, 76, 0.08));
+            filter: drop-shadow(0 0 80px rgba(201, 168, 76, 0.25)) drop-shadow(0 0 160px rgba(201, 168, 76, 0.12));
         }
 
         /* Corner brackets */
@@ -292,12 +292,27 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 900px;
-            height: 900px;
+            width: 720px;
+            height: 720px;
             z-index: 1;
             pointer-events: none;
             opacity: 0;
-            animation: tagsFadeIn 1.2s ease 1.0s forwards;
+            animation: tagsFadeIn 1.4s ease 1.0s forwards;
+        }
+
+        /* Subtle orbit ring connecting the tags */
+        .hero-services::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 560px;
+            height: 560px;
+            border: 1px solid rgba(201, 168, 76, 0.07);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 60px rgba(201, 168, 76, 0.03), inset 0 0 60px rgba(201, 168, 76, 0.02);
         }
 
         @keyframes tagsFadeIn {
@@ -305,37 +320,55 @@
             to { opacity: 1; }
         }
 
+        @keyframes tagFloat {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateY(-6px); }
+        }
+
         .hero-service-tag {
             position: absolute;
             transform: translate(-50%, -50%);
             pointer-events: auto;
-            padding: 8px 18px;
-            border: 1px solid rgba(201, 168, 76, 0.25);
-            color: rgba(232, 213, 163, 0.7);
+            padding: 9px 22px;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            color: rgba(232, 213, 163, 0.75);
             font-size: 0.6rem;
             font-weight: 600;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             text-decoration: none;
             white-space: nowrap;
-            backdrop-filter: blur(8px);
-            background: rgba(10, 22, 40, 0.5);
+            backdrop-filter: blur(12px);
+            background: rgba(10, 22, 40, 0.6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 1px rgba(201, 168, 76, 0.15);
             transition: all 0.3s ease;
+            animation: tagFloat 6s ease-in-out infinite;
         }
 
         .hero-service-tag:hover {
             border-color: var(--gold);
             color: var(--navy);
             background: var(--gold);
+            box-shadow: 0 4px 25px rgba(201, 168, 76, 0.25), 0 0 40px rgba(201, 168, 76, 0.1);
+            animation-play-state: paused;
         }
 
-        /* Circular positions around the vault */
-        .hero-service-tag:nth-child(1) { top: 7%;  left: 50%; }
-        .hero-service-tag:nth-child(2) { top: 28%; left: 88%; }
-        .hero-service-tag:nth-child(3) { top: 72%; left: 88%; }
-        .hero-service-tag:nth-child(4) { top: 93%; left: 50%; }
-        .hero-service-tag:nth-child(5) { top: 72%; left: 12%; }
-        .hero-service-tag:nth-child(6) { top: 28%; left: 12%; }
+        /* Circular positions - radius ~280px on 720px container */
+        .hero-service-tag:nth-child(1) { top: 11%;   left: 50%;   animation-delay: 0s; }
+        .hero-service-tag:nth-child(2) { top: 30.5%; left: 83.5%; animation-delay: 1s; }
+        .hero-service-tag:nth-child(3) { top: 69.5%; left: 83.5%; animation-delay: 2s; }
+        .hero-service-tag:nth-child(4) { top: 89%;   left: 50%;   animation-delay: 3s; }
+        .hero-service-tag:nth-child(5) { top: 69.5%; left: 16.5%; animation-delay: 4s; }
+        .hero-service-tag:nth-child(6) { top: 30.5%; left: 16.5%; animation-delay: 5s; }
+
+        .orbit-connectors {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
 
         /* Scroll indicator */
         .scroll-indicator {
@@ -929,7 +962,8 @@
             .hero { min-height: 550px; }
             .hero-corner { display: none; }
             .vault-bg { width: 450px; height: 450px; }
-            .hero-services { width: 620px; height: 620px; }
+            .hero-services { width: 550px; height: 550px; }
+            .hero-services::before { width: 420px; height: 420px; }
             .services-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
             .resources-grid { grid-template-columns: repeat(2, 1fr); }
             .athletes-content { grid-template-columns: 1fr; gap: 40px; }
@@ -1173,6 +1207,46 @@
             </div>
         </div>
         <div class="hero-services">
+            <!-- Connecting lines from vault to tag positions -->
+            <svg class="orbit-connectors" viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="lineUp" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.25)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.03)"/>
+                    </linearGradient>
+                    <linearGradient id="lineUR" x1="0" y1="1" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.25)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.03)"/>
+                    </linearGradient>
+                    <linearGradient id="lineLR" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.25)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.03)"/>
+                    </linearGradient>
+                    <linearGradient id="lineDown" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(201,168,76,0.25)"/>
+                        <stop offset="100%" stop-color="rgba(201,168,76,0.03)"/>
+                    </linearGradient>
+                </defs>
+                <!-- Top: vault edge → tag -->
+                <line x1="360" y1="108" x2="360" y2="79" stroke="url(#lineUp)" stroke-width="1"/>
+                <!-- Upper-right -->
+                <line x1="485" y1="163" x2="601" y2="220" stroke="url(#lineUR)" stroke-width="1"/>
+                <!-- Lower-right -->
+                <line x1="485" y1="557" x2="601" y2="500" stroke="url(#lineLR)" stroke-width="1"/>
+                <!-- Bottom -->
+                <line x1="360" y1="612" x2="360" y2="641" stroke="url(#lineDown)" stroke-width="1"/>
+                <!-- Lower-left -->
+                <line x1="235" y1="557" x2="119" y2="500" stroke="url(#lineLR)" stroke-width="1"/>
+                <!-- Upper-left -->
+                <line x1="235" y1="163" x2="119" y2="220" stroke="url(#lineUR)" stroke-width="1"/>
+                <!-- Small dots at vault connection points -->
+                <circle cx="360" cy="108" r="2" fill="rgba(201,168,76,0.35)"/>
+                <circle cx="485" cy="163" r="2" fill="rgba(201,168,76,0.35)"/>
+                <circle cx="485" cy="557" r="2" fill="rgba(201,168,76,0.35)"/>
+                <circle cx="360" cy="612" r="2" fill="rgba(201,168,76,0.35)"/>
+                <circle cx="235" cy="557" r="2" fill="rgba(201,168,76,0.35)"/>
+                <circle cx="235" cy="163" r="2" fill="rgba(201,168,76,0.35)"/>
+            </svg>
             <a href="#services" class="hero-service-tag">Asset Protection</a>
             <a href="#services" class="hero-service-tag">Estate Planning</a>
             <a href="#services" class="hero-service-tag">Business Formation</a>
